@@ -1694,38 +1694,39 @@
             const porcentaje = Math.round((completadas / totalClases) * 100);
             const pendientes = totalClases - completadas;
 
-            const progresoJSON = JSON.stringify(userProgress);
-
             // Guardar en localStorage (para visualización inmediata)
-            localStorage.setItem('simpledata_progress', progresoJSON);
+            localStorage.setItem('simpledata_progress', JSON.stringify(userProgress));
 
             // Guardar en Google Sheets via Apps Script
             if (APPS_SCRIPT_URL) {
                 try {
+                    console.log('📤 Enviando progreso a Google Sheets...');
+                    console.log('Datos:', {
+                        email: currentUser.email,
+                        completadas: completadas,
+                        porcentaje: porcentaje
+                    });
+                    
                     const response = await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        mode: 'no-cors', // Importante para Apps Script
                         headers: {
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'text/plain',
                         },
                         body: JSON.stringify({
                             email: currentUser.email,
-                            nombre: currentUser.nombre,
-                            rol: currentUser.rol,
-                            completadas: completadas,
-                            progresoJSON: progresoJSON
+                            progreso: userProgress
                         })
                     });
 
-                    console.log('✅ Datos enviados a Google Sheets');
+                    console.log('✅ Datos enviados a Google Sheets correctamente');
                     showToast('success', 'Progreso guardado', `${completadas} clases completadas (${porcentaje}%) - Sincronizado ☁️`);
                     
                 } catch (error) {
-                    console.error('❌ Error conectando con Google Sheets:', error);
+                    console.error('❌ Error al guardar en Google Sheets:', error);
                     showToast('warning', 'Guardado local', `${completadas} clases completadas (${porcentaje}%) - Solo en navegador`);
                 }
             } else {
-                // Si no hay URL del script, solo mostrar guardado local
+                console.log('ℹ️ No hay Apps Script URL configurada');
                 showToast('info', 'Guardado local', `${completadas} clases completadas (${porcentaje}%)`);
             }
 
@@ -1733,7 +1734,7 @@
             renderizarCurrentUser();
             renderizarEstudiantes();
 
-            console.log('Progreso:', {
+            console.log('📊 Progreso actualizado:', {
                 email: currentUser.email,
                 porcentaje,
                 completadas,
