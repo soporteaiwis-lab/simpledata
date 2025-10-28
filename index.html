@@ -1331,8 +1331,8 @@
         // CONFIGURACIÓN DE GOOGLE SHEETS API
         // =====================================================
         const SPREADSHEET_ID = '1MmygcBdx_gUerz7pHNDu-5ITB680sU6WMljb-2fg8-0'; // TU ID AQUÍ
-        const API_KEY = 'AIzaSyCzPHhigfOD6oHw26JftVg3YyKLijwbyY4'; // TU API KEY AQUÍ
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr2zmg-0XDRZEPbO9jYLnicB-rGRjjfnWqRR9eY2-ZCB5SCW1ZDQf5QYNRiO8MalRbvw/exec'; // TU URL DEL APPS SCRIPT AQUÍ (para guardar progreso)
+        const API_KEY = 'AIzaSyDSq5rsHoXnEfOS1khvOeLpkKT0OIY2vxc'; // TU API KEY AQUÍ
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyysFEyVJkV9tJCX13JgTWjv-V608ScGOEleUirFtX7jiHP3lsOzVDuFSbwDN6YpIexPQ/exec'; // URL del Apps Script de SIMPLEDATA
         const GITHUB_REPO = 'https://raw.githubusercontent.com/soporteaiwis-lab/simpledata/main';
 
         // =====================================================
@@ -1450,28 +1450,68 @@
 
             try {
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Usuarios?key=${API_KEY}`;
+                console.log('🔍 Intentando cargar usuarios desde:', url);
+                
                 const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.values && data.values.length > 1) {
-                    const select = document.getElementById('userSelect');
-                    select.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
+                console.log('📡 Respuesta recibida:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('❌ Error de API:', errorData);
                     
-                    // Saltar la primera fila (encabezados)
-                    for (let i = 1; i < data.values.length; i++) {
-                        const row = data.values[i];
-                        if (row[0] && row[1]) { // Email y Nombre
-                            const option = document.createElement('option');
-                            option.value = row[0]; // Email
-                            option.textContent = row[1]; // Nombre
-                            option.dataset.rol = row[2] || 'Usuario'; // Rol
-                            select.appendChild(option);
-                        }
+                    let errorMsg = 'Error al cargar usuarios';
+                    if (response.status === 403) {
+                        errorMsg = '🔒 La hoja no es pública o la API Key no tiene permisos';
+                    } else if (response.status === 404) {
+                        errorMsg = '📋 No se encontró la pestaña "Usuarios" en la hoja';
+                    } else if (response.status === 400) {
+                        errorMsg = '⚙️ Google Sheets API no está habilitada';
+                    }
+                    
+                    document.getElementById('userSelect').innerHTML = `<option value="">${errorMsg}</option>`;
+                    document.getElementById('loginError').textContent = errorMsg + '. Verifica la configuración.';
+                    document.getElementById('loginError').classList.add('show');
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('✅ Datos recibidos:', data);
+
+                if (!data.values || data.values.length < 2) {
+                    document.getElementById('userSelect').innerHTML = '<option value="">⚠️ No hay usuarios en la hoja</option>';
+                    document.getElementById('loginError').textContent = 'La pestaña "Usuarios" está vacía. Agrega al menos un usuario.';
+                    document.getElementById('loginError').classList.add('show');
+                    return;
+                }
+
+                const select = document.getElementById('userSelect');
+                select.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
+                
+                // Saltar la primera fila (encabezados)
+                for (let i = 1; i < data.values.length; i++) {
+                    const row = data.values[i];
+                    if (row[0] && row[1]) { // Email y Nombre
+                        const option = document.createElement('option');
+                        option.value = row[0]; // Email
+                        option.textContent = row[1]; // Nombre
+                        option.dataset.rol = row[2] || 'Usuario'; // Rol
+                        select.appendChild(option);
                     }
                 }
+                
+                console.log('✅ Usuarios cargados correctamente');
+                
             } catch (error) {
-                console.error('Error cargando usuarios:', error);
-                showToast('error', 'Error', 'No se pudieron cargar los usuarios');
+                console.error('❌ Error cargando usuarios:', error);
+                
+                let errorMsg = 'Error de conexión';
+                if (error.message.includes('Failed to fetch')) {
+                    errorMsg = '🌐 Error de red o CORS. Verifica que la hoja sea pública.';
+                }
+                
+                document.getElementById('userSelect').innerHTML = `<option value="">${errorMsg}</option>`;
+                document.getElementById('loginError').textContent = errorMsg + ' Revisa la consola (F12) para más detalles.';
+                document.getElementById('loginError').classList.add('show');
             }
         }
 
