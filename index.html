@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLEDATA - Portal de Adopción IA | AIWIS</title>
+    <style>
+        :root {
+            --azul-principal: #1e40af;
+            --violeta-mentor: #7c3aed;
+            --azul-claro: #3b82f6;
+            --violeta-claro: #8b5cf6;
+            --verde-exito: #10b981;
+            --naranja: #f59e0b;
+            --rojo: #ef4444;
+            --gris-texto: #64748b;
+            --fondo-claro: #f8fafc;
+            --blanco: #ffffff;
+            --negro: #0f172a;
+            --borde: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--blanco);
+        }
+
+        /* === PANTALLA DE LOGIN === */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .login-overlay.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+        }
+
+        .form-group select {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: var(--blanco);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--azul-claro);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .form-group select option {
+            background: var(--negro);
+            color: var(--blanco);
+        }
+
+        .login-btn {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            border: none;
+            border-radius: 10px;
+            color: var(--blanco);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .login-error {
+            color: var(--rojo);
+            text-align: center;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* === NAVEGACIÓN === */
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blanco);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            color: var(--blanco);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: var(--rojo);
+        }
+
+        /* === CONTENEDOR PRINCIPAL === */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* === TARJETAS DE ESTUDIANTES === */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .student-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--azul-claro);
+        }
+
+        .student-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .student-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .student-role {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        .student-stats {
+            margin-top: 1.5rem;
+        }
+
+        .stat-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-section h4 {
+            color: var(--azul-claro);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--blanco);
+        }
+
+        .stat-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--azul-claro), var(--violeta-claro));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* === SECCIÓN DE CLASES === */
+        .phase-selector {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .fase-btn {
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fase-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--azul-claro);
+            color: var(--blanco);
+        }
+
+        .fase-btn.active {
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            border-color: transparent;
+            color: var(--blanco);
+        }
+
+        .fase-content {
+            display: none;
+        }
+
+        .fase-content.active {
+            display: block;
+        }
+
+        .week-selector {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .week-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .week-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--azul-claro);
+            color: var(--blanco);
+        }
+
+        .week-btn.active {
+            background: var(--azul-claro);
+            border-color: var(--azul-claro);
+            color: var(--blanco);
+        }
+
+        .week-content {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .week-content.active {
+            display: block;
+        }
+
+        /* === CARRUSEL DE VIDEOS ESTILO NETFLIX === */
+        .carousel-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .carousel-nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: var(--blanco);
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-nav-btn:hover:not(:disabled) {
+            background: var(--azul-claro);
+            border-color: var(--azul-claro);
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .carousel-nav-btn:active:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .carousel-nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-radius: 15px;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .video-card {
+            min-width: 300px;
+            max-width: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border-color: var(--azul-claro);
+            z-index: 10;
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--negro);
+            transition: all 0.3s;
+        }
+
+        .video-card:hover .play-button {
+            transform: scale(1.2);
+            background: var(--blanco);
+        }
+
+        .video-progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 5;
+        }
+
+        .progress-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--verde-exito);
+        }
+
+        .progress-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--verde-exito);
+            color: var(--blanco);
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-day {
+            color: var(--azul-claro);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .video-description {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0.7rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* === MODAL DE CLASE === */
+        .class-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .class-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.98);
+            border-radius: 20px;
+            max-width: 1200px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 2rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 0.5rem;
+        }
+
+        .close-modal {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--blanco);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: var(--rojo);
+            transform: rotate(90deg);
+        }
+
+        .modal-video {
+            padding: 0 2rem;
+            margin: 2rem 0;
+        }
+
+        .modal-video iframe {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            border: none;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 1rem;
+            padding: 0 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .modal-tab:hover {
+            color: var(--blanco);
+        }
+
+        .modal-tab.active {
+            color: var(--azul-claro);
+            border-bottom-color: var(--azul-claro);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .tab-content h4 {
+            color: var(--azul-claro);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* === GUÍA DE ESTUDIOS === */
+        .study-guide {
+            padding: 2rem;
+        }
+
+        .guide-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .guide-section h2 {
+            color: var(--azul-claro);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .guide-section h3 {
+            color: var(--violeta-claro);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .guide-section p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .guide-day {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--azul-claro);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .guide-day strong {
+            color: var(--azul-claro);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* === TOAST NOTIFICATIONS === */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .toast {
+            background: rgba(15, 23, 42, 0.98);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            min-width: 300px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--verde-exito);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--rojo);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--azul-claro);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-content h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .toast-content p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* === LOADING === */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--azul-claro);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-card {
+                min-width: 250px;
+                max-width: 250px;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .modal-video iframe {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA DE LOGIN -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="login-logo">
+                <h1>🚀 Portal SIMPLEDATA IA</h1>
+                <p style="color: rgba(255,255,255,0.6);">Programa de Adopción IA Corporativa</p>
+            </div>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Selecciona tu usuario</label>
+                    <select id="userSelect" required>
+                        <option value="">-- Selecciona tu nombre --</option>
+                    </select>
+                </div>
+                <button type="submit" class="login-btn">Ingresar al Portal</button>
+                <div class="login-error" id="loginError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <span style="font-size: 2rem;">🚀</span>
+                <h1>SIMPLEDATA - Portal IA</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a class="nav-link active" onclick="showPage('inicio')">Inicio</a></li>
+                <li><a class="nav-link" onclick="showPage('clases')">📚 Clases</a></li>
+                <li><a class="nav-link" onclick="showPage('estudiantes')">👥 Estudiantes</a></li>
+                <li><a class="nav-link" onclick="showPage('guia')">📖 Guía de Estudios</a></li>
+                <li><a class="nav-link" href="https://github.com/soporteaiwis-lab/ada" target="_blank">🐙 GitHub</a></li>
+            </ul>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Usuario</span>
+                <button class="logout-btn" onclick="logout()" title="Cerrar sesión">🚪</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+        <!-- PÁGINA: INICIO -->
+        <section id="inicio" class="page-section active">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+                Bienvenido al Programa de Adopción IA 🚀
+            </h2>
+            <div class="students-grid" id="currentUserCard"></div>
+        </section>
+
+        <!-- PÁGINA: ESTUDIANTES -->
+        <section id="estudiantes" class="page-section">
+            <h2 style="margin-bottom: 2rem; font-size: 2rem;">📊 Dashboard de Estudiantes</h2>
+            <div class="loading" id="studentsLoading">
+                <div class="spinner"></div>
+                <span>Cargando datos de estudiantes...</span>
+            </div>
+            <div class="students-grid" id="studentsGrid"></div>
+        </section>
+
+        <!-- PÁGINA: CLASES -->
+        <section id="clases" class="page-section">
+            <h2 style="text-align: center; margin-bottom: 1rem; font-size: 2rem;">📚 Mis Clases</h2>
+            
+            <!-- Selector de Fases -->
+            <div class="phase-selector">
+                <button class="fase-btn active" onclick="mostrarFase(1)">
+                    📅 Fase 1: Fundamentos e IA Aplicada
+                </button>
+                <button class="fase-btn" onclick="mostrarFase(2)">
+                    🚀 Fase 2: Proyecto Final
+                </button>
+            </div>
+
+            <!-- FASE 1 -->
+            <div id="fase1-content" class="fase-content active">
+                <div class="week-selector">
+                    <button class="week-btn active" onclick="mostrarSemana(1)">Semana 1</button>
+                    <button class="week-btn" onclick="mostrarSemana(2)">Semana 2</button>
+                    <button class="week-btn" onclick="mostrarSemana(3)">Semana 3</button>
+                    <button class="week-btn" onclick="mostrarSemana(4)">Semana 4</button>
+                </div>
+
+                <div class="loading" id="classesLoading">
+                    <div class="spinner"></div>
+                    <span>Cargando clases...</span>
+                </div>
+
+                <!-- Semana 1 -->
+                <div id="week1" class="week-content active">
+                    <div class="carousel-container">
+                        <div class="carousel-header">
+                            <h3 class="carousel-title">📅 Semana 1: Fundamentos de IA y Productividad Inteligente</h3>
+                            <div class="carousel-controls">
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week1', 'left')">◀</button>
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week1', 'right')">▶</button>
+                            </div>
+                        </div>
+                        <div class="carousel-wrapper" id="carousel-week1">
+                            <div class="carousel-track"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semana 2 -->
+                <div id="week2" class="week-content">
+                    <div class="carousel-container">
+                        <div class="carousel-header">
+                            <h3 class="carousel-title">📅 Semana 2: IA Aplicada al Negocio y Ventas</h3>
+                            <div class="carousel-controls">
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week2', 'left')">◀</button>
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week2', 'right')">▶</button>
+                            </div>
+                        </div>
+                        <div class="carousel-wrapper" id="carousel-week2">
+                            <div class="carousel-track"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semana 3 -->
+                <div id="week3" class="week-content">
+                    <div class="carousel-container">
+                        <div class="carousel-header">
+                            <h3 class="carousel-title">📅 Semana 3: Automatización Avanzada y Desarrollo de Propuestas</h3>
+                            <div class="carousel-controls">
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week3', 'left')">◀</button>
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week3', 'right')">▶</button>
+                            </div>
+                        </div>
+                        <div class="carousel-wrapper" id="carousel-week3">
+                            <div class="carousel-track"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semana 4 -->
+                <div id="week4" class="week-content">
+                    <div class="carousel-container">
+                        <div class="carousel-header">
+                            <h3 class="carousel-title">📅 Semana 4: Refinamiento y Selección de Proyecto Final</h3>
+                            <div class="carousel-controls">
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week4', 'left')">◀</button>
+                                <button class="carousel-nav-btn" onclick="scrollCarousel('carousel-week4', 'right')">▶</button>
+                            </div>
+                        </div>
+                        <div class="carousel-wrapper" id="carousel-week4">
+                            <div class="carousel-track"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASE 2 -->
+            <div id="fase2-content" class="fase-content">
+                <div class="guide-section">
+                    <h2>🚀 Fase 2: Sprint de Desarrollo del Proyecto Final</h2>
+                    <p>En esta fase trabajaremos en el desarrollo completo del proyecto seleccionado, desde el diseño hasta la implementación.</p>
+                    
+                    <h3>📅 Semana 5-6: Desarrollo del Prototipo</h3>
+                    
+                    <div class="guide-day">
+                        <strong>Día 1: Kick-off y Arquitectura del Proyecto</strong>
+                        Definición técnica, stack tecnológico y diseño de la arquitectura del sistema.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 2: Desarrollo Backend y APIs</strong>
+                        Implementación de la lógica de negocio, bases de datos y APIs necesarias.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 3: Desarrollo Frontend y UX</strong>
+                        Diseño e implementación de la interfaz de usuario y experiencia del producto.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 4: Integración y Testing</strong>
+                        Integración de componentes, pruebas funcionales y corrección de bugs.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 5: Refinamiento y Testing de Usuario</strong>
+                        Optimización del producto y pruebas con usuarios reales.
+                    </div>
+
+                    <h3>📅 Semana 6: Finalización y Presentación</h3>
+                    
+                    <div class="guide-day">
+                        <strong>Día 6: Documentación Técnica</strong>
+                        Creación de documentación técnica y guías de usuario.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 7: Deployment y Configuración Cloud</strong>
+                        Despliegue en producción y configuración de infraestructura cloud.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 8: Preparación de Presentación</strong>
+                        Preparación del pitch y demo del proyecto final.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 9: Presentación Final del Prototipo (Demo Day)</strong>
+                        Presentación oficial del proyecto a stakeholders y evaluadores.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Día 10: Evaluación y Próximos Pasos (Cierre del Programa)</strong>
+                        Evaluación final, feedback y definición de siguientes pasos para el proyecto.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA: GUÍA DE ESTUDIOS -->
+        <section id="guia" class="page-section">
+            <div class="study-guide">
+                <h1 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    📖 Guía de Estudios - Programa AIWIS
+                </h1>
+
+                <div class="guide-section">
+                    <h2>SEMANA 1: Fundamentos de IA y Productividad Inteligente</h2>
+                    
+                    <div class="guide-day">
+                        <strong>Lunes (Día 1): Introducción a la IA Corporativa</strong>
+                        Presentación del programa, objetivos y visión. ¿Qué es la IA y por qué es crucial para SIMPLEDATA? Establecemos las bases de nuestro viaje.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Martes (Día 2): Dominando ChatGPT y Claude</strong>
+                        Aprenderás a usar las herramientas de IA más potentes del mercado para maximizar tu productividad diaria.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Miércoles (Día 3): Ingeniería de Prompts Profesional</strong>
+                        Técnicas avanzadas de prompting para obtener resultados profesionales de los LLMs.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Jueves (Día 4): IA para Desarrolladores I</strong>
+                        Introducción al desarrollo con IA: Copilot, Cursor y herramientas de código asistido.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Viernes (Día 5): Automatización de Tareas Diarias</strong>
+                        Cómo automatizar tus tareas repetitivas usando IA y scripts simples.
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h2>SEMANA 2: IA Aplicada al Negocio y Ventas</h2>
+                    
+                    <div class="guide-day">
+                        <strong>Lunes (Día 1): IA en Azure Databricks</strong>
+                        Introducción a la plataforma Azure Databricks y casos de uso con IA.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Martes (Día 2): Soluciones IA con Oracle y AWS</strong>
+                        Panorama de soluciones IA en las plataformas cloud más importantes.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Miércoles (Día 3): Automatización Real con N8N: De la Teoría a la Producción (Webinar Especial)</strong>
+                        Webinar práctico sobre cómo crear automatizaciones reales que se usan en producción.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Jueves (Día 4): IA para el Sector Financiero</strong>
+                        Casos de uso específicos de IA en el sector financiero y bancario.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Viernes (Día 5): Estrategias de Venta de Soluciones IA</strong>
+                        Cómo vender proyectos de IA a clientes: desde la prospección hasta el cierre.
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h2>SEMANA 3: Automatización Avanzada y Desarrollo de Propuestas</h2>
+                    
+                    <div class="guide-day">
+                        <strong>Lunes (Día 1): Arquitectura de Sistemas IA</strong>
+                        Diseño de arquitecturas escalables para soluciones de IA empresariales.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Martes (Día 2): Agentes IA y LangChain</strong>
+                        Creación de agentes inteligentes que pueden ejecutar tareas complejas de forma autónoma.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Miércoles (Día 3): Automatización Avanzada: Workflows Enterprise con N8N (Webinar Parte 2)</strong>
+                        Webinar avanzado sobre workflows empresariales con N8N.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Jueves (Día 4): Workshop: Propuestas para Cliente BCI</strong>
+                        Workshop práctico desarrollando una propuesta real para el cliente BCI.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Viernes (Día 5): Workshop: Automatizaciones Internas</strong>
+                        Identificación y desarrollo de automatizaciones para procesos internos de SIMPLEDATA.
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h2>SEMANA 4: Refinamiento y Selección de Proyecto Final</h2>
+                    
+                    <div class="guide-day">
+                        <strong>Lunes (Día 1): Detección de Oportunidades IA</strong>
+                        Metodología para identificar oportunidades de IA en cualquier negocio.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Martes (Día 2): Design Thinking para Proyectos IA</strong>
+                        Aplicación de Design Thinking en el diseño de soluciones de IA.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Miércoles (Día 3): Elaboración de Propuestas Comerciales</strong>
+                        Cómo estructurar propuestas comerciales ganadoras para proyectos de IA.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Jueves (Día 4): Presentación Final de Propuestas</strong>
+                        Cada equipo presenta su propuesta de proyecto para recibir feedback.
+                    </div>
+                    
+                    <div class="guide-day">
+                        <strong>Viernes (Día 5): Selección de Proyecto Final</strong>
+                        Votación y selección del proyecto que se desarrollará en la Fase 2.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL DE CLASE -->
+    <div class="class-modal" id="classModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <h2 id="modalTitle">Título de la Clase</h2>
+                    <div class="modal-meta">
+                        <span id="modalWeek">📅 Semana X</span>
+                        <span id="modalDay">🗓️ Día</span>
+                    </div>
+                </div>
+                <button class="close-modal" onclick="closeClassModal()">×</button>
+            </div>
+            
+            <div class="modal-video">
+                <iframe id="modalVideo" allowfullscreen></iframe>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('description')">📝 Descripción</button>
+                <button class="modal-tab" onclick="switchTab('transcript')">📄 Transcripción</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="tab-description" class="tab-content active">
+                    <div id="modalDescription"></div>
+                </div>
+                <div id="tab-transcript" class="tab-content">
+                    <div id="modalTranscript"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // =====================================================
+        // CONFIGURACIÓN DE GOOGLE SHEETS API
+        // =====================================================
+        const SPREADSHEET_ID = '13rQdIhzb-Ve9GAClQwopVtS9u2CpGTj2aUy528a7YSw'; // TU ID AQUÍ
+        const API_KEY = 'AIzaSyCzPHhigfOD6oHw26JftVg3YyKLijwbyY4'; // TU API KEY AQUÍ
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr2zmg-0XDRZEPbO9jYLnicB-rGRjjfnWqRR9eY2-ZCB5SCW1ZDQf5QYNRiO8MalRbvw/exec'; // TU URL DEL APPS SCRIPT AQUÍ (para guardar progreso)
+        const GITHUB_REPO = 'https://raw.githubusercontent.com/soporteaiwis-lab/ada/main';
+
+        // =====================================================
+        // DATOS DE CLASES ACTUALIZADOS
+        // =====================================================
+        const clasesData = {
+            1: {
+                lunes: {
+                    title: "Introducción a la IA Corporativa",
+                    desc: "Presentación del programa, objetivos y visión. ¿Qué es la IA y por qué es crucial para SIMPLEDATA?"
+                },
+                martes: {
+                    title: "Dominando ChatGPT y Claude",
+                    desc: "Aprenderás a usar las herramientas de IA más potentes del mercado para maximizar tu productividad."
+                },
+                miercoles: {
+                    title: "Ingeniería de Prompts Profesional",
+                    desc: "Técnicas avanzadas de prompting para obtener resultados profesionales de los LLMs."
+                },
+                jueves: {
+                    title: "IA para Desarrolladores I",
+                    desc: "Introducción al desarrollo con IA: Copilot, Cursor y herramientas de código asistido."
+                },
+                viernes: {
+                    title: "Automatización de Tareas Diarias",
+                    desc: "Cómo automatizar tus tareas repetitivas usando IA y scripts simples."
+                }
+            },
+            2: {
+                lunes: {
+                    title: "IA en Azure Databricks",
+                    desc: "Introducción a la plataforma Azure Databricks y casos de uso con IA."
+                },
+                martes: {
+                    title: "Soluciones IA con Oracle y AWS",
+                    desc: "Panorama de soluciones IA en las plataformas cloud más importantes."
+                },
+                miercoles: {
+                    title: "Automatización Real con N8N: De la Teoría a la Producción",
+                    desc: "Webinar práctico sobre cómo crear automatizaciones reales que se usan en producción."
+                },
+                jueves: {
+                    title: "IA para el Sector Financiero",
+                    desc: "Casos de uso específicos de IA en el sector financiero y bancario."
+                },
+                viernes: {
+                    title: "Estrategias de Venta de Soluciones IA",
+                    desc: "Cómo vender proyectos de IA a clientes: desde la prospección hasta el cierre."
+                }
+            },
+            3: {
+                lunes: {
+                    title: "Arquitectura de Sistemas IA",
+                    desc: "Diseño de arquitecturas escalables para soluciones de IA empresariales."
+                },
+                martes: {
+                    title: "Agentes IA y LangChain",
+                    desc: "Creación de agentes inteligentes que pueden ejecutar tareas complejas de forma autónoma."
+                },
+                miercoles: {
+                    title: "Automatización Avanzada: Workflows Enterprise con N8N",
+                    desc: "Webinar avanzado sobre workflows empresariales con N8N."
+                },
+                jueves: {
+                    title: "Workshop: Propuestas para Cliente BCI",
+                    desc: "Workshop práctico desarrollando una propuesta real para el cliente BCI."
+                },
+                viernes: {
+                    title: "Workshop: Automatizaciones Internas",
+                    desc: "Identificación y desarrollo de automatizaciones para procesos internos de SIMPLEDATA."
+                }
+            },
+            4: {
+                lunes: {
+                    title: "Detección de Oportunidades IA",
+                    desc: "Metodología para identificar oportunidades de IA en cualquier negocio."
+                },
+                martes: {
+                    title: "Design Thinking para Proyectos IA",
+                    desc: "Aplicación de Design Thinking en el diseño de soluciones de IA."
+                },
+                miercoles: {
+                    title: "Elaboración de Propuestas Comerciales",
+                    desc: "Cómo estructurar propuestas comerciales ganadoras para proyectos de IA."
+                },
+                jueves: {
+                    title: "Presentación Final de Propuestas",
+                    desc: "Cada equipo presenta su propuesta de proyecto para recibir feedback."
+                },
+                viernes: {
+                    title: "Selección de Proyecto Final",
+                    desc: "Votación y selección del proyecto que se desarrollará en la Fase 2."
+                }
+            }
+        };
+
+        const diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+
+        // =====================================================
+        // VARIABLES GLOBALES
+        // =====================================================
+        let allUsers = [];
+        let currentUser = null;
+        let userProgress = {};
+        let videosMap = {};
+
+        // =====================================================
+        // FUNCIONES DE AUTENTICACIÓN
+        // =====================================================
+        async function cargarUsuariosLogin() {
+            if (!SPREADSHEET_ID || !API_KEY) {
+                document.getElementById('userSelect').innerHTML = '<option value="">⚠️ Configura Google Sheets</option>';
+                return;
+            }
+
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Usuarios?key=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.values && data.values.length > 1) {
+                    const select = document.getElementById('userSelect');
+                    select.innerHTML = '<option value="">-- Selecciona tu nombre --</option>';
+                    
+                    // Saltar la primera fila (encabezados)
+                    for (let i = 1; i < data.values.length; i++) {
+                        const row = data.values[i];
+                        if (row[0] && row[1]) { // Email y Nombre
+                            const option = document.createElement('option');
+                            option.value = row[0]; // Email
+                            option.textContent = row[1]; // Nombre
+                            option.dataset.rol = row[2] || 'Usuario'; // Rol
+                            select.appendChild(option);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando usuarios:', error);
+                showToast('error', 'Error', 'No se pudieron cargar los usuarios');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const select = document.getElementById('userSelect');
+            const email = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const nombre = selectedOption.textContent;
+            const rol = selectedOption.dataset.rol;
+
+            if (!email) {
+                document.getElementById('loginError').textContent = 'Por favor selecciona un usuario';
+                document.getElementById('loginError').classList.add('show');
+                return;
+            }
+
+            currentUser = { email, nombre, rol };
+            localStorage.setItem('ada_user', JSON.stringify(currentUser));
+
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('userName').textContent = nombre;
+            document.getElementById('userAvatar').textContent = nombre.charAt(0).toUpperCase();
+
+            cargarProgreso();
+            if (SPREADSHEET_ID && API_KEY) {
+                cargarDatosUsuarios();
+                cargarVideos();
+            }
+
+            showToast('success', '¡Bienvenido/a!', `Hola ${nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
+        }
+
+        function verificarUsuario() {
+            const userData = localStorage.getItem('ada_user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                document.getElementById('loginOverlay').classList.add('hidden');
+                document.getElementById('userName').textContent = currentUser.nombre;
+                document.getElementById('userAvatar').textContent = currentUser.nombre.charAt(0).toUpperCase();
+                return true;
+            }
+            return false;
+        }
+
+        function logout() {
+            localStorage.removeItem('ada_user');
+            localStorage.removeItem('ada_progress');
+            currentUser = null;
+            userProgress = {};
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            showToast('info', 'Sesión cerrada', 'Has cerrado sesión correctamente');
+        }
+
+        // =====================================================
+        // FUNCIONES DE GOOGLE SHEETS
+        // =====================================================
+        async function cargarDatosUsuarios() {
+            if (!SPREADSHEET_ID || !API_KEY) return;
+
+            try {
+                // Cargar datos de Usuarios
+                const urlUsuarios = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Usuarios?key=${API_KEY}`;
+                const responseUsuarios = await fetch(urlUsuarios);
+                const dataUsuarios = await responseUsuarios.json();
+
+                // Cargar datos de Habilidades
+                const urlHabilidades = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Habilidades?key=${API_KEY}`;
+                const responseHabilidades = await fetch(urlHabilidades);
+                const dataHabilidades = await responseHabilidades.json();
+
+                // Cargar datos de Progreso
+                const urlProgreso = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Progreso?key=${API_KEY}`;
+                const responseProgreso = await fetch(urlProgreso);
+                const dataProgreso = await responseProgreso.json();
+
+                if (dataUsuarios.values && dataUsuarios.values.length > 1) {
+                    allUsers = [];
+                    
+                    // Crear mapa de habilidades
+                    const habilidadesMap = {};
+                    if (dataHabilidades.values && dataHabilidades.values.length > 1) {
+                        for (let i = 1; i < dataHabilidades.values.length; i++) {
+                            const row = dataHabilidades.values[i];
+                            if (row[0]) {
+                                habilidadesMap[row[0]] = {
+                                    prompting: parseInt(row[3]) || 0,
+                                    herramientas: parseInt(row[4]) || 0,
+                                    analisis: parseInt(row[5]) || 0
+                                };
+                            }
+                        }
+                    }
+
+                    // Crear mapa de progreso
+                    const progresoMap = {};
+                    if (dataProgreso.values && dataProgreso.values.length > 1) {
+                        for (let i = 1; i < dataProgreso.values.length; i++) {
+                            const row = dataProgreso.values[i];
+                            if (row[0]) {
+                                progresoMap[row[0]] = {
+                                    porcentaje: parseInt(row[3]) || 0,
+                                    completados: parseInt(row[4]) || 0,
+                                    pendientes: parseInt(row[5]) || 20
+                                };
+                            }
+                        }
+                    }
+
+                    // Combinar datos
+                    for (let i = 1; i < dataUsuarios.values.length; i++) {
+                        const row = dataUsuarios.values[i];
+                        if (row[0] && row[1]) {
+                            const email = row[0];
+                            const usuario = {
+                                email: email,
+                                nombre: row[1],
+                                rol: row[2] || 'Usuario',
+                                habilidades: habilidadesMap[email] || {
+                                    prompting: 0,
+                                    herramientas: 0,
+                                    analisis: 0
+                                },
+                                progreso: progresoMap[email] || {
+                                    porcentaje: 0,
+                                    completados: 0,
+                                    pendientes: 20
+                                }
+                            };
+                            allUsers.push(usuario);
+                        }
+                    }
+
+                    renderizarEstudiantes();
+                    renderizarCurrentUser();
+                }
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                showToast('error', 'Error', 'No se pudieron cargar los datos de estudiantes');
+            }
+        }
+
+        async function cargarVideos() {
+            if (!SPREADSHEET_ID || !API_KEY) return;
+
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Videos?key=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.values && data.values.length > 1) {
+                    videosMap = {};
+                    for (let i = 1; i < data.values.length; i++) {
+                        const row = data.values[i];
+                        if (row[0] && row[1] && row[2]) {
+                            const fase = parseInt(row[0]);
+                            const semana = parseInt(row[1]);
+                            const dia = row[2].toLowerCase();
+                            const url = row[3] || '';
+                            
+                            const key = `${fase}-${semana}-${dia}`;
+                            videosMap[key] = { url };
+                        }
+                    }
+                    
+                    renderizarVideos();
+                    document.getElementById('classesLoading').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error cargando videos:', error);
+                document.getElementById('classesLoading').innerHTML = '<p style="color: var(--rojo);">❌ Error al cargar videos</p>';
+            }
+        }
+
+        async function guardarProgreso() {
+            if (!currentUser) return;
+
+            const totalClases = 20; // Total de clases en Fase 1
+            const completadas = Object.values(userProgress).filter(v => v).length;
+            const porcentaje = Math.round((completadas / totalClases) * 100);
+            const pendientes = totalClases - completadas;
+
+            const progresoJSON = JSON.stringify(userProgress);
+
+            // Guardar en localStorage (para visualización inmediata)
+            localStorage.setItem('ada_progress', progresoJSON);
+
+            // Guardar en Google Sheets via Apps Script
+            if (APPS_SCRIPT_URL) {
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Importante para Apps Script
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: currentUser.email,
+                            nombre: currentUser.nombre,
+                            rol: currentUser.rol,
+                            completadas: completadas,
+                            progresoJSON: progresoJSON
+                        })
+                    });
+
+                    console.log('✅ Datos enviados a Google Sheets');
+                    showToast('success', 'Progreso guardado', `${completadas} clases completadas (${porcentaje}%) - Sincronizado ☁️`);
+                    
+                } catch (error) {
+                    console.error('❌ Error conectando con Google Sheets:', error);
+                    showToast('warning', 'Guardado local', `${completadas} clases completadas (${porcentaje}%) - Solo en navegador`);
+                }
+            } else {
+                // Si no hay URL del script, solo mostrar guardado local
+                showToast('info', 'Guardado local', `${completadas} clases completadas (${porcentaje}%)`);
+            }
+
+            // Actualizar UI
+            renderizarCurrentUser();
+            renderizarEstudiantes();
+
+            console.log('Progreso:', {
+                email: currentUser.email,
+                porcentaje,
+                completadas,
+                pendientes
+            });
+        }
+
+        // =====================================================
+        // FUNCIONES DE PROGRESO
+        // =====================================================
+        function cargarProgreso() {
+            const saved = localStorage.getItem('ada_progress');
+            if (saved) {
+                userProgress = JSON.parse(saved);
+            } else {
+                userProgress = {};
+            }
+        }
+
+        function marcarProgreso(event, semana, dia) {
+            event.stopPropagation();
+            const videoKey = `s${semana}-${dia}`;
+            userProgress[videoKey] = event.target.checked;
+            
+            guardarProgreso();
+            renderizarVideos();
+        }
+
+        // =====================================================
+        // FUNCIONES DE RENDERIZADO
+        // =====================================================
+        function renderizarCurrentUser() {
+            if (!currentUser) return;
+
+            const totalClases = 20;
+            const completadas = Object.values(userProgress).filter(v => v).length;
+            const porcentaje = Math.round((completadas / totalClases) * 100);
+            const pendientes = totalClases - completadas;
+
+            const userData = allUsers.find(u => u.email === currentUser.email);
+            const habilidades = userData ? userData.habilidades : {
+                prompting: 0,
+                herramientas: 0,
+                analisis: 0
+            };
+
+            document.getElementById('currentUserCard').innerHTML = `
+                <div class="student-card" style="max-width: 600px; margin: 0 auto;">
+                    <div class="student-header">
+                        <div class="student-avatar">${currentUser.nombre.charAt(0).toUpperCase()}</div>
+                        <div class="student-info">
+                            <h3>${currentUser.nombre}</h3>
+                            <div class="student-role">${currentUser.rol}</div>
+                        </div>
+                    </div>
+
+                    <div class="student-stats">
+                        <div class="stat-section">
+                            <h4>💪 Fortalezas</h4>
+                            <div class="stat-item">
+                                <span class="stat-label">Prompting</span>
+                                <span class="stat-value">${habilidades.prompting}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" style="width: ${habilidades.prompting}%"></div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Herramientas IA</span>
+                                <span class="stat-value">${habilidades.herramientas}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" style="width: ${habilidades.herramientas}%"></div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Análisis</span>
+                                <span class="stat-value">${habilidades.analisis}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" style="width: ${habilidades.analisis}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="stat-section">
+                            <h4>📊 Progreso de Clases Alumno</h4>
+                            <div class="stat-item">
+                                <span class="stat-label">Porcentaje</span>
+                                <span class="stat-value">${porcentaje}%</span>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" style="width: ${porcentaje}%"></div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Clases Realizadas</span>
+                                <span class="stat-value">${completadas}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Clases Pendientes</span>
+                                <span class="stat-value">${pendientes}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarEstudiantes() {
+            const grid = document.getElementById('studentsGrid');
+            if (!allUsers || allUsers.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6);">No hay estudiantes para mostrar</p>';
+                document.getElementById('studentsLoading').style.display = 'none';
+                return;
+            }
+
+            grid.innerHTML = allUsers.map(user => {
+                const inicial = user.nombre.charAt(0).toUpperCase();
+                return `
+                    <div class="student-card">
+                        <div class="student-header">
+                            <div class="student-avatar">${inicial}</div>
+                            <div class="student-info">
+                                <h3>${user.nombre}</h3>
+                                <div class="student-role">${user.rol}</div>
+                            </div>
+                        </div>
+
+                        <div class="student-stats">
+                            <div class="stat-section">
+                                <h4>💪 Fortalezas</h4>
+                                <div class="stat-item">
+                                    <span class="stat-label">Prompting</span>
+                                    <span class="stat-value">${user.habilidades.prompting}</span>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: ${user.habilidades.prompting}%"></div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Herramientas IA</span>
+                                    <span class="stat-value">${user.habilidades.herramientas}</span>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: ${user.habilidades.herramientas}%"></div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Análisis</span>
+                                    <span class="stat-value">${user.habilidades.analisis}</span>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: ${user.habilidades.analisis}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-section">
+                                <h4>📊 Progreso de Clases Alumno</h4>
+                                <div class="stat-item">
+                                    <span class="stat-label">Porcentaje</span>
+                                    <span class="stat-value">${user.progreso.porcentaje}%</span>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill" style="width: ${user.progreso.porcentaje}%"></div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Clases Realizadas</span>
+                                    <span class="stat-value">${user.progreso.completados}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Clases Pendientes</span>
+                                    <span class="stat-value">${user.progreso.pendientes}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('studentsLoading').style.display = 'none';
+        }
+
+        function renderizarVideos() {
+            for (let semana = 1; semana <= 4; semana++) {
+                const wrapper = document.getElementById(`carousel-week${semana}`);
+                if (!wrapper) continue;
+                
+                const track = wrapper.querySelector('.carousel-track');
+                if (!track) continue;
+                
+                track.innerHTML = '';
+                
+                diasSemana.forEach(dia => {
+                    const claseInfo = clasesData[semana][dia];
+                    if (claseInfo) {
+                        const videoKey = `1-${semana}-${dia}`;
+                        const videoData = videosMap[videoKey];
+                        const videoUrl = videoData ? videoData.url : '';
+                        const videoId = extraerVideoId(videoUrl);
+                        
+                        track.innerHTML += crearVideoCard(semana, dia, claseInfo, videoId);
+                    }
+                });
+            }
+        }
+
+        function extraerVideoId(url) {
+            if (!url) return '';
+            const patterns = [
+                /youtube\.com\/embed\/([^?]+)/,
+                /youtube\.com\/watch\?v=([^&]+)/,
+                /youtu\.be\/([^?]+)/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return '';
+        }
+
+        function crearVideoCard(semana, dia, claseInfo, videoId) {
+            const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
+            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+            const hasVideo = videoId !== '';
+            
+            const videoKey = `s${semana}-${dia}`;
+            const isCompleted = userProgress[videoKey] || false;
+            
+            return `
+                <div class="video-card" onclick="openClassModal(${semana}, '${dia}', '${videoId}')">
+                    <div class="video-thumbnail">
+                        ${thumbnail ? `<img src="${thumbnail}" alt="${claseInfo.title}">` : '<span style="font-size: 3rem;">🎬</span>'}
+                        ${hasVideo ? '<div class="play-button">▶</div>' : ''}
+                        ${hasVideo ? `
+                            <div class="video-progress">
+                                <input type="checkbox" 
+                                       class="progress-checkbox" 
+                                       ${isCompleted ? 'checked' : ''} 
+                                       onchange="marcarProgreso(event, ${semana}, '${dia}')"
+                                       onclick="event.stopPropagation()">
+                            </div>
+                        ` : ''}
+                        ${isCompleted ? '<div class="progress-badge">✓ Visto</div>' : ''}
+                    </div>
+                    <div class="video-info">
+                        <div class="video-day">${diaCapitalizado}</div>
+                        <div class="video-title">${claseInfo.title}</div>
+                        <div class="video-description">${claseInfo.desc}</div>
+                        <div class="video-meta">
+                            <span>⏱️ 60 min</span>
+                            ${hasVideo ? '<span>✅ Disponible</span>' : '<span style="color: var(--naranja);">📅 Próximamente</span>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // =====================================================
+        // FUNCIONES DE CARRUSEL
+        // =====================================================
+        function scrollCarousel(carouselId, direction) {
+            const wrapper = document.getElementById(carouselId);
+            if (!wrapper) return;
+            
+            const scrollAmount = 330; // Ancho de tarjeta (300px) + gap (30px)
+            
+            if (direction === 'left') {
+                wrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                wrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // =====================================================
+        // MODAL DE CLASE
+        // =====================================================
+        async function openClassModal(semana, dia, videoId) {
+            const modal = document.getElementById('classModal');
+            const claseInfo = clasesData[semana][dia];
+            const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
+            
+            const videoFrame = document.getElementById('modalVideo');
+            if (videoId) {
+                videoFrame.src = `https://www.youtube.com/embed/${videoId}`;
+            } else {
+                videoFrame.src = '';
+            }
+            
+            document.getElementById('modalTitle').textContent = claseInfo.title;
+            document.getElementById('modalWeek').textContent = `📅 Semana ${semana}`;
+            document.getElementById('modalDay').textContent = `🗓️ ${diaCapitalizado}`;
+            document.getElementById('modalDescription').innerHTML = `<p>${claseInfo.desc}</p>`;
+            
+            await cargarTranscripcion(semana, dia);
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeClassModal() {
+            const modal = document.getElementById('classModal');
+            modal.classList.remove('active');
+            document.getElementById('modalVideo').src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.modal-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        async function cargarTranscripcion(semana, dia) {
+            const transcriptDiv = document.getElementById('modalTranscript');
+            transcriptDiv.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">Cargando transcripción...</p>';
+            
+            try {
+                const url = `${GITHUB_REPO}/transcripts/fase1-semana${semana}-${dia}.md`;
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    const html = text
+                        .replace(/## (.*)/g, '<h4>$1</h4>')
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^(.+)$/gm, '<p>$1</p>');
+                    transcriptDiv.innerHTML = html;
+                } else {
+                    transcriptDiv.innerHTML = `
+                        <p style="text-align: center; color: rgba(255,255,255,0.6);">
+                            📝 Transcripción no disponible aún.<br>
+                            <small>Se agregará después de la clase.</small>
+                        </p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando transcripción:', error);
+                transcriptDiv.innerHTML = '<p style="text-align: center; color: var(--naranja);">Error al cargar transcripción</p>';
+            }
+        }
+
+        // =====================================================
+        // NAVEGACIÓN
+        // =====================================================
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function mostrarFase(faseNum) {
+            document.querySelectorAll('.fase-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.fase-btn')[faseNum - 1].classList.add('active');
+            
+            if (faseNum === 1) {
+                document.getElementById('fase1-content').classList.add('active');
+                document.getElementById('fase2-content').classList.remove('active');
+            } else {
+                document.getElementById('fase1-content').classList.remove('active');
+                document.getElementById('fase2-content').classList.add('active');
+            }
+        }
+
+        function mostrarSemana(semanaNum) {
+            document.querySelectorAll('.week-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.week-btn')[semanaNum - 1].classList.add('active');
+            
+            document.querySelectorAll('.week-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`week${semanaNum}`).classList.add('active');
+        }
+
+        // =====================================================
+        // TOAST NOTIFICATIONS
+        // =====================================================
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // =====================================================
+        // INICIALIZACIÓN
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarUsuariosLogin();
+            
+            const isLoggedIn = verificarUsuario();
+            
+            if (isLoggedIn) {
+                cargarProgreso();
+                
+                if (SPREADSHEET_ID && API_KEY) {
+                    cargarDatosUsuarios();
+                    cargarVideos();
+                } else {
+                    document.getElementById('studentsLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
+                    document.getElementById('classesLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
+                }
+                
+                setTimeout(() => {
+                    showToast('success', '¡Bienvenido/a!', `Hola ${currentUser.nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
+                }, 500);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeClassModal();
+            }
+        });
+    </script>
+</body>
+</html>
