@@ -1495,10 +1495,11 @@
             document.getElementById('userName').textContent = nombre;
             document.getElementById('userAvatar').textContent = nombre.charAt(0).toUpperCase();
 
-            cargarProgreso();
+            // La carga de datos ahora es más robusta y sincroniza el progreso detallado
             if (SPREADSHEET_ID && API_KEY) {
-                cargarDatosUsuarios();
-                cargarVideos();
+                cargarDatosUsuarios().then(() => {
+                    cargarVideos(); // Cargar videos después de tener el progreso correcto
+                });
             }
 
             showToast('success', '¡Bienvenido/a!', `Hola ${nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
@@ -1531,26 +1532,28 @@
         async function cargarDatosUsuarios() {
             if (!SPREADSHEET_ID || !API_KEY) return;
 
+            // Primero, cargamos el progreso local como respaldo inicial
+            cargarProgreso();
+
             try {
-                // Cargar datos de Usuarios
+                // Cargar datos de todas las hojas
                 const urlUsuarios = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Usuarios2?key=${API_KEY}`;
-                const responseUsuarios = await fetch(urlUsuarios);
-                const dataUsuarios = await responseUsuarios.json();
-
-                // Cargar datos de Habilidades
                 const urlHabilidades = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Habilidades2?key=${API_KEY}`;
-                const responseHabilidades = await fetch(urlHabilidades);
-                const dataHabilidades = await responseHabilidades.json();
-
-                // Cargar datos de Progreso
                 const urlProgreso = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Progreso2?key=${API_KEY}`;
-                const responseProgreso = await fetch(urlProgreso);
+
+                const [responseUsuarios, responseHabilidades, responseProgreso] = await Promise.all([
+                    fetch(urlUsuarios),
+                    fetch(urlHabilidades),
+                    fetch(urlProgreso)
+                ]);
+
+                const dataUsuarios = await responseUsuarios.json();
+                const dataHabilidades = await responseHabilidades.json();
                 const dataProgreso = await responseProgreso.json();
 
                 if (dataUsuarios.values && dataUsuarios.values.length > 1) {
                     allUsers = [];
                     
-                    // Crear mapa de habilidades
                     const habilidadesMap = {};
                     if (dataHabilidades.values && dataHabilidades.values.length > 1) {
                         for (let i = 1; i < dataHabilidades.values.length; i++) {
@@ -1565,45 +1568,48 @@
                         }
                     }
 
-                    // Crear mapa de progreso
                     const progresoMap = {};
                     if (dataProgreso.values && dataProgreso.values.length > 1) {
                         for (let i = 1; i < dataProgreso.values.length; i++) {
                             const row = dataProgreso.values[i];
                             if (row[0]) {
-                                // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
-                                // Ajustamos los índices para que lean las columnas correctas
-                                // después de haber añadido la columna "Rol".
+                                // Esto construye el progreso agregado para la vista de "Estudiantes"
                                 progresoMap[row[0]] = {
-                                    porcentaje: parseInt(row[4]) || 0,  // Antes era row[3]
-                                    completados: parseInt(row[5]) || 0, // Antes era row[4]
-                                    pendientes: parseInt(row[6]) || 20 // Antes era row[5]
+                                    porcentaje: parseInt(row[4]) || 0,
+                                    completados: parseInt(row[5]) || 0,
+                                    pendientes: parseInt(row[6]) || 20
                                 };
+
+                                // --- ¡LA LÓGICA CLAVE ESTÁ AQUÍ! ---
+                                // Si esta fila de progreso pertenece al usuario que ha iniciado sesión...
+                                if (currentUser && row[0] === currentUser.email && row[7]) {
+                                    try {
+                                        // ...cargamos el JSON detallado desde la hoja de cálculo (columna H, índice 7).
+                                        // Esto se convierte en la fuente de verdad para los checkboxes.
+                                        userProgress = JSON.parse(row[7]);
+                                        // Actualizamos el localStorage para que esté sincronizado.
+                                        localStorage.setItem('simpledata_progress', row[7]);
+                                        console.log('✅ Progreso detallado del usuario cargado desde Google Sheets.');
+                                    } catch (e) {
+                                        console.error('Error al parsear el JSON de progreso desde Google Sheets. Se usará el progreso local.', e);
+                                    }
+                                }
                             }
                         }
                     }
 
-                    // Combinar datos
+                    // Combinar datos para la lista de todos los usuarios
                     for (let i = 1; i < dataUsuarios.values.length; i++) {
                         const row = dataUsuarios.values[i];
                         if (row[0] && row[1]) {
                             const email = row[0];
-                            const usuario = {
+                            allUsers.push({
                                 email: email,
                                 nombre: row[1],
                                 rol: row[2] || 'Usuario',
-                                habilidades: habilidadesMap[email] || {
-                                    prompting: 0,
-                                    herramientas: 0,
-                                    analisis: 0
-                                },
-                                progreso: progresoMap[email] || {
-                                    porcentaje: 0,
-                                    completados: 0,
-                                    pendientes: 20
-                                }
-                            };
-                            allUsers.push(usuario);
+                                habilidades: habilidadesMap[email] || { prompting: 0, herramientas: 0, analisis: 0 },
+                                progreso: progresoMap[email] || { porcentaje: 0, completados: 0, pendientes: 20 }
+                            });
                         }
                     }
 
@@ -1611,8 +1617,8 @@
                     renderizarCurrentUser();
                 }
             } catch (error) {
-                console.error('Error cargando datos:', error);
-                showToast('error', 'Error', 'No se pudieron cargar los datos de estudiantes');
+                console.error('Error masivo al cargar datos:', error);
+                showToast('error', 'Error de Conexión', 'No se pudieron cargar los datos de la hoja de cálculo.');
             }
         }
 
@@ -1699,7 +1705,12 @@
         function cargarProgreso() {
             const saved = localStorage.getItem('simpledata_progress');
             if (saved) {
-                userProgress = JSON.parse(saved);
+                try {
+                    userProgress = JSON.parse(saved);
+                } catch (e) {
+                    userProgress = {}; // Si el JSON es inválido, empezar de cero
+                    console.error("Error al parsear progreso local", e);
+                }
             } else {
                 userProgress = {};
             }
@@ -2096,11 +2107,11 @@
             const isLoggedIn = verificarUsuario();
             
             if (isLoggedIn) {
-                cargarProgreso();
-                
+                // La carga de datos ahora es más robusta y sincroniza el progreso detallado
                 if (SPREADSHEET_ID && API_KEY) {
-                    cargarDatosUsuarios();
-                    cargarVideos();
+                    cargarDatosUsuarios().then(() => {
+                        cargarVideos(); // Cargar videos después de tener el progreso correcto
+                    });
                 } else {
                     document.getElementById('studentsLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
                     document.getElementById('classesLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
