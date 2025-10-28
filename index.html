@@ -977,7 +977,7 @@
                 <li><a class="nav-link" onclick="showPage('clases')">📚 Clases</a></li>
                 <li><a class="nav-link" onclick="showPage('estudiantes')">👥 Estudiantes</a></li>
                 <li><a class="nav-link" onclick="showPage('guia')">📖 Guía de Estudios</a></li>
-                <li><a class="nav-link" href="https://github.com/soporteaiwis-lab/ada" target="_blank">🐙 GitHub</a></li>
+                <li><a class="nav-link" href="https://github.com/soporteaiwis-lab/simpledata" target="_blank">🐙 GitHub</a></li>
             </ul>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">U</div>
@@ -1333,7 +1333,7 @@
         const SPREADSHEET_ID = '1MmygcBdx_gUerz7pHNDu-5ITB680sU6WMljb-2fg8-0'; // TU ID AQUÍ
         const API_KEY = 'AIzaSyCzPHhigfOD6oHw26JftVg3YyKLijwbyY4'; // TU API KEY AQUÍ
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr2zmg-0XDRZEPbO9jYLnicB-rGRjjfnWqRR9eY2-ZCB5SCW1ZDQf5QYNRiO8MalRbvw/exec'; // TU URL DEL APPS SCRIPT AQUÍ (para guardar progreso)
-        const GITHUB_REPO = 'https://raw.githubusercontent.com/soporteaiwis-lab/ada/main';
+        const GITHUB_REPO = 'https://raw.githubusercontent.com/soporteaiwis-lab/simpledata/main';
 
         // =====================================================
         // DATOS DE CLASES ACTUALIZADOS
@@ -1490,7 +1490,7 @@
             }
 
             currentUser = { email, nombre, rol };
-            localStorage.setItem('ada_user', JSON.stringify(currentUser));
+            localStorage.setItem('simpledata_user', JSON.stringify(currentUser));
 
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('userName').textContent = nombre;
@@ -1506,7 +1506,7 @@
         }
 
         function verificarUsuario() {
-            const userData = localStorage.getItem('ada_user');
+            const userData = localStorage.getItem('simpledata_user');
             if (userData) {
                 currentUser = JSON.parse(userData);
                 document.getElementById('loginOverlay').classList.add('hidden');
@@ -1518,8 +1518,8 @@
         }
 
         function logout() {
-            localStorage.removeItem('ada_user');
-            localStorage.removeItem('ada_progress');
+            localStorage.removeItem('simpledata_user');
+            localStorage.removeItem('simpledata_progress');
             currentUser = null;
             userProgress = {};
             document.getElementById('loginOverlay').classList.remove('hidden');
@@ -1657,7 +1657,7 @@
             const progresoJSON = JSON.stringify(userProgress);
 
             // Guardar en localStorage (para visualización inmediata)
-            localStorage.setItem('ada_progress', progresoJSON);
+            localStorage.setItem('simpledata_progress', progresoJSON);
 
             // Guardar en Google Sheets via Apps Script
             if (APPS_SCRIPT_URL) {
@@ -1705,7 +1705,7 @@
         // FUNCIONES DE PROGRESO
         // =====================================================
         function cargarProgreso() {
-            const saved = localStorage.getItem('ada_progress');
+            const saved = localStorage.getItem('simpledata_progress');
             if (saved) {
                 userProgress = JSON.parse(saved);
             } else {
