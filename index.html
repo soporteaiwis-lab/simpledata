@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -94,7 +95,9 @@
             font-weight: 500;
         }
 
-        .form-group select {
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
             padding: 1rem;
             border-radius: 10px;
             border: 2px solid rgba(255,255,255,0.1);
@@ -102,9 +105,12 @@
             color: var(--blanco);
             font-size: 1rem;
             transition: all 0.3s;
+            font-family: inherit;
         }
 
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: var(--azul-claro);
             background: rgba(255,255,255,0.1);
@@ -256,6 +262,14 @@
         .page-section.active {
             display: block;
         }
+        
+        /* === PÁGINA INICIO LAYOUT === */
+        .home-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: flex-start;
+        }
 
         /* === TARJETAS DE ESTUDIANTES === */
         .students-grid {
@@ -264,7 +278,7 @@
             gap: 1.5rem;
             margin-top: 2rem;
         }
-
+        
         .student-card {
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
@@ -272,7 +286,6 @@
             padding: 1.5rem;
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s;
-            cursor: pointer;
         }
 
         .student-card:hover {
@@ -654,6 +667,34 @@
             color: rgba(255,255,255,0.6);
         }
 
+        /* === ESTILOS PARA BOTONES DE ACCIÓN (TEXTO/QUIZ) === */
+        .video-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.6rem;
+            text-align: center;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn:hover {
+            background: var(--azul-claro);
+            color: var(--blanco);
+            border-color: var(--azul-claro);
+            transform: translateY(-2px);
+        }
+
         /* === MODAL DE CLASE === */
         .class-modal {
             display: none;
@@ -829,6 +870,148 @@
             display: block;
             margin-bottom: 0.5rem;
         }
+        
+        /* === FORMULARIO DE REPORTE === */
+        .report-generator-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .report-generator-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--blanco);
+        }
+
+        .idea-form {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+        
+        .idea-form .form-group {
+            gap: 1rem;
+        }
+        
+        .idea-list-container {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .idea-list-container h4 {
+            margin-bottom: 1rem;
+        }
+        
+        .idea-list-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--blanco);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .filter-btn.active {
+            background: var(--azul-claro);
+            border-color: var(--azul-claro);
+        }
+        
+        .idea-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        .idea-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            border-left: 3px solid var(--azul-claro);
+        }
+        
+        .idea-item.pregunta {
+            border-left-color: var(--naranja);
+        }
+        
+        .idea-item-content {
+            flex: 1;
+            word-break: break-word;
+        }
+        
+        .idea-item-content span {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+        
+        .idea-item-content p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            margin-top: 0.3rem;
+        }
+        
+        .delete-idea-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .delete-idea-btn:hover {
+            color: var(--rojo);
+            transform: scale(1.1);
+        }
+        
+        .report-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .report-btn {
+            flex: 1;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            border: none;
+            border-radius: 10px;
+            color: var(--blanco);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .report-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--azul-claro);
+        }
 
         /* === TOAST NOTIFICATIONS === */
         .toast-container {
@@ -915,6 +1098,12 @@
         }
 
         /* === RESPONSIVE === */
+        @media (max-width: 1200px) {
+            .home-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 768px) {
             .navbar-content {
                 flex-direction: column;
@@ -977,6 +1166,7 @@
                 <li><a class="nav-link" onclick="showPage('clases')">📚 Clases</a></li>
                 <li><a class="nav-link" onclick="showPage('estudiantes')">👥 Estudiantes</a></li>
                 <li><a class="nav-link" onclick="showPage('guia')">📖 Guía de Estudios</a></li>
+                <li><a class="nav-link" href="https://drive.google.com/drive/folders/14-PsRxjl31lnh4LwkZ3FJrVD_QW06SWz?usp=drive_link" target="_blank" rel="noopener noreferrer">📂 Aula Virtual</a></li>
                 <li><a class="nav-link" href="https://github.com/soporteaiwis-lab/simpledata" target="_blank">🐙 GitHub</a></li>
             </ul>
             <div class="user-info">
@@ -994,7 +1184,55 @@
             <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
                 Bienvenido al Programa de Adopción de Datos e IA 📊
             </h2>
-            <div class="students-grid" id="currentUserCard"></div>
+            <div class="home-layout">
+                <div id="currentUserCardContainer">
+                    <!-- El perfil del usuario se renderizará aquí -->
+                </div>
+                
+                <!-- Formulario de Generador de Reporte -->
+                <div class="report-generator-card">
+                    <h3>Generar Reporte</h3>
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label for="reportName">Tu Nombre</label>
+                            <input type="text" id="reportName" placeholder="Ingresa tu nombre completo">
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label for="reportCompany">Empresa (Opcional)</label>
+                            <input type="text" id="reportCompany" placeholder="Nombre de la empresa">
+                        </div>
+                    </form>
+
+                    <form id="ideaForm" class="idea-form" onsubmit="handleIdeaSubmit(event)">
+                        <div class="form-group">
+                             <label for="ideaType">Agregar Idea o Pregunta</label>
+                            <select id="ideaType">
+                                <option value="idea">💡 Idea</option>
+                                <option value="pregunta">❓ Pregunta</option>
+                            </select>
+                            <textarea id="ideaText" rows="3" placeholder="Describe tu idea o pregunta aquí..." required></textarea>
+                        </div>
+                         <button type="submit" class="login-btn" style="width: 100%;">Agregar</button>
+                    </form>
+                    
+                    <div class="idea-list-container">
+                        <h4>Mis Ideas y Preguntas Guardadas</h4>
+                        <div class="idea-list-filters">
+                            <button class="filter-btn active" onclick="filterIdeas('all')">Todas</button>
+                            <button class="filter-btn" onclick="filterIdeas('idea')">💡 Ideas</button>
+                            <button class="filter-btn" onclick="filterIdeas('pregunta')">❓ Preguntas</button>
+                        </div>
+                        <div class="idea-list" id="ideaList">
+                            <!-- Las ideas y preguntas se renderizarán aquí -->
+                        </div>
+                    </div>
+
+                    <div class="report-buttons">
+                        <button class="report-btn" onclick="generarReportePDF()">🖨️ Generar PDF / Imprimir</button>
+                        <button class="report-btn secondary" onclick="generarReporteHTML()">📄 Generar HTML</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- PÁGINA: ESTUDIANTES -->
@@ -1438,6 +1676,7 @@
         let currentUser = null;
         let userProgress = {};
         let videosMap = {};
+        let userIdeas = [];
 
         // =====================================================
         // FUNCIONES DE AUTENTICACIÓN
@@ -1494,6 +1733,7 @@
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('userName').textContent = nombre;
             document.getElementById('userAvatar').textContent = nombre.charAt(0).toUpperCase();
+            document.getElementById('reportName').value = nombre;
 
             // La carga de datos ahora es más robusta y sincroniza el progreso detallado
             if (SPREADSHEET_ID && API_KEY) {
@@ -1501,7 +1741,8 @@
                     cargarVideos(); // Cargar videos después de tener el progreso correcto
                 });
             }
-
+            
+            loadIdeas(); // Cargar ideas guardadas
             showToast('success', '¡Bienvenido/a!', `Hola ${nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
         }
 
@@ -1512,6 +1753,7 @@
                 document.getElementById('loginOverlay').classList.add('hidden');
                 document.getElementById('userName').textContent = currentUser.nombre;
                 document.getElementById('userAvatar').textContent = currentUser.nombre.charAt(0).toUpperCase();
+                document.getElementById('reportName').value = currentUser.nombre;
                 return true;
             }
             return false;
@@ -1520,8 +1762,10 @@
         function logout() {
             localStorage.removeItem('simpledata_user');
             localStorage.removeItem('simpledata_progress');
+            localStorage.removeItem('simpledata_ideas');
             currentUser = null;
             userProgress = {};
+            userIdeas = [];
             document.getElementById('loginOverlay').classList.remove('hidden');
             showToast('info', 'Sesión cerrada', 'Has cerrado sesión correctamente');
         }
@@ -1742,9 +1986,11 @@
                 herramientas: 0,
                 analisis: 0
             };
+            
+            const container = document.getElementById('currentUserCardContainer');
 
-            document.getElementById('currentUserCard').innerHTML = `
-                <div class="student-card" style="max-width: 600px; margin: 0 auto;">
+            container.innerHTML = `
+                <div class="student-card">
                     <div class="student-header">
                         <div class="student-avatar">${currentUser.nombre.charAt(0).toUpperCase()}</div>
                         <div class="student-info">
@@ -1813,7 +2059,7 @@
             grid.innerHTML = allUsers.map(user => {
                 const inicial = user.nombre.charAt(0).toUpperCase();
                 return `
-                    <div class="student-card">
+                    <div class="student-card" style="cursor: default;">
                         <div class="student-header">
                             <div class="student-avatar">${inicial}</div>
                             <div class="student-info">
@@ -1920,6 +2166,13 @@
             
             const videoKey = `s${semana}-${dia}`;
             const isCompleted = userProgress[videoKey] || false;
+
+            const classNumber = (semana - 1) * 5 + (diasSemana.indexOf(dia) + 1);
+            const formattedClassNumber = String(classNumber).padStart(2, '0');
+
+            const repoBaseUrl = 'https://raw.githack.com/soporteaiwis-lab/simpledata/main';
+            const textoUrl = `${repoBaseUrl}/clase${formattedClassNumber}.html`;
+            const quizUrl = `${repoBaseUrl}/quiz${formattedClassNumber}.html`;
             
             return `
                 <div class="video-card" onclick="openClassModal(${semana}, '${dia}', '${videoId}')">
@@ -1944,6 +2197,14 @@
                         <div class="video-meta">
                             <span>⏱️ 60 min</span>
                             ${hasVideo ? '<span>✅ Disponible</span>' : '<span style="color: var(--naranja);">📅 Próximamente</span>'}
+                        </div>
+                        <div class="video-actions">
+                            <a href="${textoUrl}" class="action-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                                📝 Texto
+                            </a>
+                            <a href="${quizUrl}" class="action-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                                🧠 Quiz
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -2035,6 +2296,199 @@
                 transcriptDiv.innerHTML = '<p style="text-align: center; color: var(--naranja);">Error al cargar transcripción</p>';
             }
         }
+        
+        // =====================================================
+        // GESTOR DE IDEAS Y REPORTES
+        // =====================================================
+        function loadIdeas() {
+            const savedIdeas = localStorage.getItem('simpledata_ideas');
+            userIdeas = savedIdeas ? JSON.parse(savedIdeas) : [];
+            renderIdeas();
+        }
+
+        function saveIdeas() {
+            localStorage.setItem('simpledata_ideas', JSON.stringify(userIdeas));
+        }
+        
+        function handleIdeaSubmit(event) {
+            event.preventDefault();
+            const type = document.getElementById('ideaType').value;
+            const text = document.getElementById('ideaText').value;
+
+            if (!text.trim()) {
+                showToast('error', 'Campo vacío', 'Por favor, escribe tu idea o pregunta.');
+                return;
+            }
+
+            const newIdea = {
+                id: Date.now(),
+                type: type,
+                text: text
+            };
+
+            userIdeas.push(newIdea);
+            saveIdeas();
+            renderIdeas();
+            
+            document.getElementById('ideaText').value = '';
+            showToast('success', 'Agregado', `Tu ${type} ha sido guardada.`);
+        }
+
+        function deleteIdea(id) {
+            userIdeas = userIdeas.filter(idea => idea.id !== id);
+            saveIdeas();
+            renderIdeas();
+            showToast('info', 'Eliminado', 'El ítem ha sido eliminado.');
+        }
+
+        function renderIdeas(filter = 'all') {
+            const listContainer = document.getElementById('ideaList');
+            listContainer.innerHTML = '';
+
+            const filteredIdeas = userIdeas.filter(idea => filter === 'all' || idea.type === filter);
+
+            if (filteredIdeas.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">No hay items guardados.</p>';
+                return;
+            }
+
+            filteredIdeas.forEach(idea => {
+                const item = document.createElement('div');
+                item.className = `idea-item ${idea.type}`;
+                item.innerHTML = `
+                    <div class="idea-item-content">
+                        <span>${idea.type === 'idea' ? '💡 Idea' : '❓ Pregunta'}:</span>
+                        <p>${idea.text.replace(/\n/g, '<br>')}</p>
+                    </div>
+                    <button class="delete-idea-btn" onclick="deleteIdea(${idea.id})" title="Eliminar">🗑️</button>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+        
+        function filterIdeas(filter) {
+             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+             event.target.classList.add('active');
+             renderIdeas(filter);
+        }
+        
+        function generarReporteContenido() {
+            if (!currentUser) return '<p>Error: Usuario no encontrado.</p>';
+            
+            const reportName = document.getElementById('reportName').value || currentUser.nombre;
+            const reportCompany = document.getElementById('reportCompany').value;
+            
+            const userData = allUsers.find(u => u.email === currentUser.email);
+            if (!userData) return '<p>Error: Datos del usuario no encontrados.</p>';
+            
+            const totalClases = 20;
+            const completadas = Object.values(userProgress).filter(v => v).length;
+            const porcentaje = Math.round((completadas / totalClases) * 100);
+
+            const ideasHTML = userIdeas.length > 0 ? userIdeas.map(idea => `
+                <div class="idea-item ${idea.type}">
+                    <strong>${idea.type === 'idea' ? '💡 Idea' : '❓ Pregunta'}:</strong>
+                    <p>${idea.text}</p>
+                </div>
+            `).join('') : '<p>No se registraron ideas o preguntas.</p>';
+
+            return `
+                <div class="report-header">
+                    <h1>Reporte de Progreso - SIMPLEDATA</h1>
+                    <p><strong>Estudiante:</strong> ${reportName}</p>
+                    ${reportCompany ? `<p><strong>Empresa:</strong> ${reportCompany}</p>` : ''}
+                    <p><strong>Fecha de Generación:</strong> ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div class="report-section">
+                    <h2>📊 Resumen de Progreso</h2>
+                    <div class="stat-item"><span>Porcentaje Completado:</span> <strong>${porcentaje}%</strong></div>
+                    <div class="stat-item"><span>Clases Realizadas:</span> <strong>${completadas} de ${totalClases}</strong></div>
+                </div>
+
+                <div class="report-section">
+                    <h2>💪 Perfil de Fortalezas</h2>
+                    <div class="stat-item"><span>Prompting:</span> <strong>${userData.habilidades.prompting}%</strong></div>
+                    <div class="stat-item"><span>Herramientas IA:</span> <strong>${userData.habilidades.herramientas}%</strong></div>
+                    <div class="stat-item"><span>Análisis:</span> <strong>${userData.habilidades.analisis}%</strong></div>
+                </div>
+                
+                <div class="report-section">
+                    <h2>💡 Mis Ideas y Preguntas</h2>
+                    ${ideasHTML}
+                </div>
+            `;
+        }
+
+        function generarReporteHTML() {
+            const reportContent = generarReporteContenido();
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Reporte de Progreso - ${currentUser.nombre}</title>
+                        <style>
+                            body { font-family: sans-serif; margin: 0; padding: 2rem; background-color: #f4f7f6; color: #333; }
+                            .report-container { max-width: 800px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+                            h1, h2 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+                            .report-header { text-align: center; margin-bottom: 2rem; }
+                            .report-section { margin-bottom: 2rem; }
+                            .stat-item { display: flex; justify-content: space-between; padding: 0.8rem; border-bottom: 1px solid #eee; }
+                            .stat-item:last-child { border-bottom: none; }
+                            .idea-item { background-color: #f9f9f9; border-left: 4px solid #3b82f6; padding: 1rem; margin-top: 1rem; border-radius: 4px; }
+                            .idea-item.pregunta { border-left-color: #f59e0b; }
+                            .idea-item p { margin: 0.5rem 0 0 0; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="report-container">
+                            ${reportContent}
+                        </div>
+                    </body>
+                </html>
+            `);
+            reportWindow.document.close();
+        }
+
+        function generarReportePDF() {
+            const reportContent = generarReporteContenido();
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            document.body.appendChild(iframe);
+
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(`
+                 <html>
+                    <head>
+                        <title>Reporte de Progreso</title>
+                         <style>
+                            body { font-family: sans-serif; margin: 0; padding: 1rem; color: #333; }
+                            h1, h2 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+                            .report-header { text-align: center; margin-bottom: 2rem; }
+                            .report-section { margin-bottom: 2rem; page-break-inside: avoid; }
+                            .stat-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #ccc; }
+                            .stat-item:last-child { border-bottom: none; }
+                            .idea-item { border: 1px solid #ddd; border-left: 4px solid #3b82f6; padding: 1rem; margin-top: 1rem; page-break-inside: avoid; }
+                            .idea-item.pregunta { border-left-color: #f59e0b; }
+                            .idea-item p { margin: 0.5rem 0 0 0; }
+                        </style>
+                    </head>
+                    <body>${reportContent}</body>
+                </html>
+            `);
+            doc.close();
+
+            setTimeout(() => {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                document.body.removeChild(iframe);
+            }, 500);
+        }
+
 
         // =====================================================
         // NAVEGACIÓN
@@ -2048,7 +2502,12 @@
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            // Busca el link por el onclick en lugar del target del evento para mayor robustez
+            const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(
+                link => link.getAttribute('onclick') === `showPage('${pageId}')`
+            );
+            if (activeLink) activeLink.classList.add('active');
         }
 
         function mostrarFase(faseNum) {
@@ -2095,7 +2554,7 @@
             setTimeout(() => {
                 toast.style.animation = 'slideIn 0.3s ease reverse';
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }, 4000);
         }
 
         // =====================================================
@@ -2116,6 +2575,8 @@
                     document.getElementById('studentsLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
                     document.getElementById('classesLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
                 }
+
+                loadIdeas(); // Cargar ideas/preguntas guardadas
                 
                 setTimeout(() => {
                     showToast('success', '¡Bienvenido/a!', `Hola ${currentUser.nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
