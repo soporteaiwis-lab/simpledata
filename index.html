@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -542,6 +541,7 @@ html
 
         .carousel-track {
             display: flex;
+
             gap: 1rem;
             padding: 0.5rem;
         }
@@ -594,6 +594,7 @@ html
             font-size: 1.5rem;
             color: var(--negro);
             transition: all 0.3s;
+            z-index: 2;
         }
 
         .video-card:hover .play-button {
@@ -1097,6 +1098,157 @@ html
             to { transform: rotate(360deg); }
         }
 
+        /* === ASISTENTE IA (CHAT WIDGET) === */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2500;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            border: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title h3 {
+            font-size: 1rem;
+            margin: 0;
+            color: white;
+        }
+
+        .chat-title p {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.8);
+            margin: 0;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message.bot {
+            background: rgba(255,255,255,0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message.user {
+            background: var(--azul-claro);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: white;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--azul-claro);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .chat-send {
+            background: none;
+            border: none;
+            color: var(--azul-claro);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+        }
+
+        .chat-send:hover {
+            color: var(--violeta-claro);
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 1200px) {
             .home-layout {
@@ -1130,11 +1282,15 @@ html
             .modal-video iframe {
                 height: 300px;
             }
+
+            .chat-window {
+                width: 300px;
+                right: -20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- PANTALLA DE LOGIN -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-box">
             <div class="login-logo">
@@ -1154,7 +1310,6 @@ html
         </div>
     </div>
 
-    <!-- NAVEGACIÓN -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo">
@@ -1177,19 +1332,15 @@ html
         </div>
     </nav>
 
-    <!-- CONTENEDOR PRINCIPAL -->
     <div class="container">
-        <!-- PÁGINA: INICIO -->
         <section id="inicio" class="page-section active">
             <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
                 Bienvenido al Programa de Adopción de Datos e IA 📊
             </h2>
             <div class="home-layout">
                 <div id="currentUserCardContainer">
-                    <!-- El perfil del usuario se renderizará aquí -->
-                </div>
+                    </div>
                 
-                <!-- Formulario de Generador de Reporte -->
                 <div class="report-generator-card">
                     <h3>Generar Reporte</h3>
                     <form id="reportForm">
@@ -1223,8 +1374,7 @@ html
                             <button class="filter-btn" onclick="filterIdeas('pregunta')">❓ Preguntas</button>
                         </div>
                         <div class="idea-list" id="ideaList">
-                            <!-- Las ideas y preguntas se renderizarán aquí -->
-                        </div>
+                            </div>
                     </div>
 
                     <div class="report-buttons">
@@ -1235,7 +1385,6 @@ html
             </div>
         </section>
 
-        <!-- PÁGINA: ESTUDIANTES -->
         <section id="estudiantes" class="page-section">
             <h2 style="margin-bottom: 2rem; font-size: 2rem;">📊 Dashboard de Estudiantes</h2>
             <div class="loading" id="studentsLoading">
@@ -1245,11 +1394,9 @@ html
             <div class="students-grid" id="studentsGrid"></div>
         </section>
 
-        <!-- PÁGINA: CLASES -->
         <section id="clases" class="page-section">
             <h2 style="text-align: center; margin-bottom: 1rem; font-size: 2rem;">📚 Mis Clases</h2>
             
-            <!-- Selector de Fases -->
             <div class="phase-selector">
                 <button class="fase-btn active" onclick="mostrarFase(1)">
                     📅 Fase 1: Fundamentos e IA Aplicada
@@ -1259,7 +1406,6 @@ html
                 </button>
             </div>
 
-            <!-- FASE 1 -->
             <div id="fase1-content" class="fase-content active">
                 <div class="week-selector">
                     <button class="week-btn active" onclick="mostrarSemana(1)">Semana 1</button>
@@ -1273,7 +1419,6 @@ html
                     <span>Cargando clases...</span>
                 </div>
 
-                <!-- Semana 1 -->
                 <div id="week1" class="week-content active">
                     <div class="carousel-container">
                         <div class="carousel-header">
@@ -1289,7 +1434,6 @@ html
                     </div>
                 </div>
 
-                <!-- Semana 2 -->
                 <div id="week2" class="week-content">
                     <div class="carousel-container">
                         <div class="carousel-header">
@@ -1305,7 +1449,6 @@ html
                     </div>
                 </div>
 
-                <!-- Semana 3 -->
                 <div id="week3" class="week-content">
                     <div class="carousel-container">
                         <div class="carousel-header">
@@ -1321,7 +1464,6 @@ html
                     </div>
                 </div>
 
-                <!-- Semana 4 -->
                 <div id="week4" class="week-content">
                     <div class="carousel-container">
                         <div class="carousel-header">
@@ -1338,7 +1480,6 @@ html
                 </div>
             </div>
 
-            <!-- FASE 2 -->
             <div id="fase2-content" class="fase-content">
                 <div class="guide-section">
                     <h2>🚀 Fase 2: Sprint de Desarrollo del Proyecto Final</h2>
@@ -1401,7 +1542,6 @@ html
             </div>
         </section>
 
-        <!-- PÁGINA: GUÍA DE ESTUDIOS -->
         <section id="guia" class="page-section">
             <div class="study-guide">
                 <h1 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; background: linear-gradient(135deg, var(--azul-claro), var(--violeta-claro)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
@@ -1527,7 +1667,6 @@ html
         </section>
     </div>
 
-    <!-- MODAL DE CLASE -->
     <div class="class-modal" id="classModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1561,8 +1700,31 @@ html
         </div>
     </div>
 
-    <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
+
+    <div class="chat-widget">
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <h3>🤖 Bot SimpleData</h3>
+                    <p>Asistente Virtual del Portal</p>
+                </div>
+                <button class="chat-close" onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    👋 ¡Hola! Soy tu asistente de SimpleData. Puedo ayudarte a buscar información en la guía de estudios o las clases. ¿Qué necesitas saber hoy?
+                </div>
+            </div>
+            <form class="chat-input-area" onsubmit="handleChatSubmit(event)">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Pregunta sobre las clases..." autocomplete="off">
+                <button type="submit" class="chat-send">➤</button>
+            </form>
+        </div>
+        <button class="chat-button" onclick="toggleChat()">
+            💬
+        </button>
+    </div>
 
     <script>
         // =====================================================
@@ -1570,7 +1732,7 @@ html
         // =====================================================
         const SPREADSHEET_ID = '13rQdIhzb-Ve9GAClQwopVtS9u2CpGTj2aUy528a7YSw'; // TU ID AQUÍ
         const API_KEY = 'AIzaSyCzPHhigfOD6oHw26JftVg3YyKLijwbyY4'; // TU API KEY AQUÍ
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwxHzlEhCYVZaPSJl4V6ptxcDkefM_SUJbwqpgVB9gZV3SGVbWYB3EGMf6tHP0PfET62w/exec'; // TU URL DEL APPS SCRIPT AQUÍ (para guardar progreso)
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwxHzlEhCYVZaPSJl4V6ptxcDkefM_SUJbwqpgVB9gZV3SGVbWYB3EGMf6tHP0PfET62w/exec'; // TU URL DEL APPS SCRIPT AQUÍ
         const GITHUB_REPO = 'https://raw.githubusercontent.com/soporteaiwis-lab/simpledata/main';
 
         // =====================================================
@@ -1613,7 +1775,7 @@ html
                     desc: "Webinar práctico sobre cómo crear automatizaciones reales que se usan en producción."
                 },
                 jueves: {
-                    title: "IA Gerativa | Audio y Videos",
+                    title: "IA Generativa | Audio y Videos",
                     desc: "Google AI Studio, Nano Banana de Google y Notebook LM."
                 },
                 viernes: {
@@ -1735,14 +1897,13 @@ html
             document.getElementById('userAvatar').textContent = nombre.charAt(0).toUpperCase();
             document.getElementById('reportName').value = nombre;
 
-            // La carga de datos ahora es más robusta y sincroniza el progreso detallado
             if (SPREADSHEET_ID && API_KEY) {
                 cargarDatosUsuarios().then(() => {
-                    cargarVideos(); // Cargar videos después de tener el progreso correcto
+                    cargarVideos();
                 });
             }
             
-            loadIdeas(); // Cargar ideas guardadas
+            loadIdeas();
             showToast('success', '¡Bienvenido/a!', `Hola ${nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
         }
 
@@ -1757,6 +1918,7 @@ html
                 return true;
             }
             return false;
+
         }
 
         function logout() {
@@ -1775,12 +1937,9 @@ html
         // =====================================================
         async function cargarDatosUsuarios() {
             if (!SPREADSHEET_ID || !API_KEY) return;
-
-            // Primero, cargamos el progreso local como respaldo inicial
             cargarProgreso();
 
             try {
-                // Cargar datos de todas las hojas
                 const urlUsuarios = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Usuarios2?key=${API_KEY}`;
                 const urlHabilidades = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Habilidades2?key=${API_KEY}`;
                 const urlProgreso = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Progreso2?key=${API_KEY}`;
@@ -1817,32 +1976,24 @@ html
                         for (let i = 1; i < dataProgreso.values.length; i++) {
                             const row = dataProgreso.values[i];
                             if (row[0]) {
-                                // Esto construye el progreso agregado para la vista de "Estudiantes"
                                 progresoMap[row[0]] = {
                                     porcentaje: parseInt(row[4]) || 0,
                                     completados: parseInt(row[5]) || 0,
                                     pendientes: parseInt(row[6]) || 20
                                 };
 
-                                // --- ¡LA LÓGICA CLAVE ESTÁ AQUÍ! ---
-                                // Si esta fila de progreso pertenece al usuario que ha iniciado sesión...
                                 if (currentUser && row[0] === currentUser.email && row[7]) {
                                     try {
-                                        // ...cargamos el JSON detallado desde la hoja de cálculo (columna H, índice 7).
-                                        // Esto se convierte en la fuente de verdad para los checkboxes.
                                         userProgress = JSON.parse(row[7]);
-                                        // Actualizamos el localStorage para que esté sincronizado.
                                         localStorage.setItem('simpledata_progress', row[7]);
-                                        console.log('✅ Progreso detallado del usuario cargado desde Google Sheets.');
                                     } catch (e) {
-                                        console.error('Error al parsear el JSON de progreso desde Google Sheets. Se usará el progreso local.', e);
+                                        console.error('Error al parsear el JSON de progreso.', e);
                                     }
                                 }
                             }
                         }
                     }
 
-                    // Combinar datos para la lista de todos los usuarios
                     for (let i = 1; i < dataUsuarios.values.length; i++) {
                         const row = dataUsuarios.values[i];
                         if (row[0] && row[1]) {
@@ -1952,7 +2103,7 @@ html
                 try {
                     userProgress = JSON.parse(saved);
                 } catch (e) {
-                    userProgress = {}; // Si el JSON es inválido, empezar de cero
+                    userProgress = {}; 
                     console.error("Error al parsear progreso local", e);
                 }
             } else {
@@ -2120,6 +2271,9 @@ html
             document.getElementById('studentsLoading').style.display = 'none';
         }
 
+        // =====================================================
+        // MANEJO DE VIDEOS Y URLS (YOUTUBE / DRIVE)
+        // =====================================================
         function renderizarVideos() {
             for (let semana = 1; semana <= 4; semana++) {
                 const wrapper = document.getElementById(`carousel-week${semana}`);
@@ -2136,48 +2290,72 @@ html
                         const videoKey = `1-${semana}-${dia}`;
                         const videoData = videosMap[videoKey];
                         const videoUrl = videoData ? videoData.url : '';
-                        const videoId = extraerVideoId(videoUrl);
                         
-                        track.innerHTML += crearVideoCard(semana, dia, claseInfo, videoId);
+                        // Nueva lógica: Detectar plataforma
+                        const videoInfo = detectarPlataformaVideo(videoUrl);
+                        
+                        track.innerHTML += crearVideoCard(semana, dia, claseInfo, videoInfo);
                     }
                 });
             }
         }
 
-        function extraerVideoId(url) {
-            if (!url) return '';
-            const patterns = [
+        function detectarPlataformaVideo(url) {
+            if (!url) return { type: 'none', id: '' };
+
+            // 1. YouTube Regex
+            const ytPatterns = [
                 /youtube\.com\/embed\/([^?]+)/,
                 /youtube\.com\/watch\?v=([^&]+)/,
                 /youtu\.be\/([^?]+)/
             ];
-            
-            for (const pattern of patterns) {
+            for (const pattern of ytPatterns) {
                 const match = url.match(pattern);
-                if (match) return match[1];
+                if (match) return { type: 'youtube', id: match[1] };
             }
-            return '';
+
+            // 2. Google Drive Regex
+            const drivePattern = /\/d\/(.+?)\/|\/open\?id=(.+?)(&|$)/;
+            const match = url.match(drivePattern);
+            if (match) {
+                return { type: 'drive', id: match[1] || match[2] };
+            }
+
+            return { type: 'unknown', id: '' };
         }
 
-        function crearVideoCard(semana, dia, claseInfo, videoId) {
+        function crearVideoCard(semana, dia, claseInfo, videoInfo) {
             const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
-            const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
-            const hasVideo = videoId !== '';
             
+            // Lógica de Miniatura
+            let thumbnailHtml = '';
+            if (videoInfo.type === 'youtube') {
+                thumbnailHtml = `<img src="https://img.youtube.com/vi/${videoInfo.id}/maxresdefault.jpg" alt="${claseInfo.title}">`;
+            } else if (videoInfo.type === 'drive') {
+                // Drive no tiene thumbnail público fácil, usamos un placeholder elegante
+                thumbnailHtml = `
+                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #1e40af, #7c3aed); display:flex; flex-direction:column; align-items:center; justify-content:center; color:white;">
+                        <span style="font-size:3rem;">📹</span>
+                        <span style="font-size:0.8rem; margin-top:0.5rem; opacity:0.8;">Grabación en Drive</span>
+                    </div>
+                `;
+            } else {
+                thumbnailHtml = '<span style="font-size: 3rem;">🎬</span>';
+            }
+
+            const hasVideo = videoInfo.type !== 'none';
             const videoKey = `s${semana}-${dia}`;
             const isCompleted = userProgress[videoKey] || false;
-
             const classNumber = (semana - 1) * 5 + (diasSemana.indexOf(dia) + 1);
             const formattedClassNumber = String(classNumber).padStart(2, '0');
-
             const repoBaseUrl = 'https://raw.githack.com/soporteaiwis-lab/simpledata/main';
             const textoUrl = `${repoBaseUrl}/clase${formattedClassNumber}.html`;
             const quizUrl = `${repoBaseUrl}/quiz${formattedClassNumber}.html`;
             
             return `
-                <div class="video-card" onclick="openClassModal(${semana}, '${dia}', '${videoId}')">
+                <div class="video-card" onclick="openClassModal(${semana}, '${dia}', '${videoInfo.type}', '${videoInfo.id}')">
                     <div class="video-thumbnail">
-                        ${thumbnail ? `<img src="${thumbnail}" alt="${claseInfo.title}">` : '<span style="font-size: 3rem;">🎬</span>'}
+                        ${thumbnailHtml}
                         ${hasVideo ? '<div class="play-button">▶</div>' : ''}
                         ${hasVideo ? `
                             <div class="video-progress">
@@ -2211,15 +2389,10 @@ html
             `;
         }
 
-        // =====================================================
-        // FUNCIONES DE CARRUSEL
-        // =====================================================
         function scrollCarousel(carouselId, direction) {
             const wrapper = document.getElementById(carouselId);
             if (!wrapper) return;
-            
             const scrollAmount = 330;
-            
             if (direction === 'left') {
                 wrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             } else {
@@ -2230,14 +2403,20 @@ html
         // =====================================================
         // MODAL DE CLASE
         // =====================================================
-        async function openClassModal(semana, dia, videoId) {
+        async function openClassModal(semana, dia, type, videoId) {
             const modal = document.getElementById('classModal');
             const claseInfo = clasesData[semana][dia];
             const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
             
             const videoFrame = document.getElementById('modalVideo');
+            
+            // Lógica de Source para el Iframe
             if (videoId) {
-                videoFrame.src = `https://www.youtube.com/embed/${videoId}`;
+                if (type === 'youtube') {
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                } else if (type === 'drive') {
+                    videoFrame.src = `https://drive.google.com/file/d/${videoId}/preview`;
+                }
             } else {
                 videoFrame.src = '';
             }
@@ -2263,7 +2442,6 @@ html
         function switchTab(tabName) {
             document.querySelectorAll('.modal-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
             event.target.classList.add('active');
             document.getElementById(`tab-${tabName}`).classList.add('active');
         }
@@ -2344,7 +2522,6 @@ html
         function renderIdeas(filter = 'all') {
             const listContainer = document.getElementById('ideaList');
             listContainer.innerHTML = '';
-
             const filteredIdeas = userIdeas.filter(idea => filter === 'all' || idea.type === filter);
 
             if (filteredIdeas.length === 0) {
@@ -2489,6 +2666,93 @@ html
             }, 500);
         }
 
+        // =====================================================
+        // LOGICA DEL ASISTENTE IA (SIMPLE SEARCH)
+        // =====================================================
+        function toggleChat() {
+            const chat = document.getElementById('chatWindow');
+            chat.classList.toggle('active');
+            if (chat.classList.contains('active')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const userMsg = input.value.trim();
+            if(!userMsg) return;
+
+            // 1. Mostrar mensaje usuario
+            addChatMessage(userMsg, 'user');
+            input.value = '';
+
+            // 2. Simular "Pensando..."
+            const chatMessages = document.getElementById('chatMessages');
+            const loadingId = 'loading-' + Date.now();
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'message bot';
+            loadingMsg.id = loadingId;
+            loadingMsg.innerText = 'Pensando...';
+            chatMessages.appendChild(loadingMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // 3. Generar respuesta (Fake AI Search)
+            setTimeout(() => {
+                const response = generateAIResponse(userMsg);
+                document.getElementById(loadingId).remove();
+                addChatMessage(response, 'bot');
+            }, 800);
+        }
+
+        function addChatMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function generateAIResponse(query) {
+            const lowerQuery = query.toLowerCase();
+            
+            // 1. Saludos Básicos
+            if(lowerQuery.match(/hola|buenos dias|buenas/)) {
+                return "¡Hola! ¿En qué puedo ayudarte con el curso de Datos e IA hoy?";
+            }
+            if(lowerQuery.match(/gracias|chao|adios/)) {
+                return "¡De nada! ¡Mucho éxito en tu estudio!";
+            }
+
+            // 2. Búsqueda en el DOM (Guía de Estudios y Clases)
+            let foundInfo = [];
+            
+            // Buscar en Guía
+            document.querySelectorAll('.guide-day').forEach(el => {
+                if(el.textContent.toLowerCase().includes(lowerQuery)) {
+                    foundInfo.push("📌 " + el.innerText.trim());
+                }
+            });
+
+            // Buscar en Clases
+            Object.values(clasesData).forEach(semana => {
+                Object.values(semana).forEach(clase => {
+                    if(clase.title.toLowerCase().includes(lowerQuery) || clase.desc.toLowerCase().includes(lowerQuery)) {
+                        foundInfo.push(`📚 Clase: **${clase.title}** - ${clase.desc}`);
+                    }
+                });
+            });
+
+            if (foundInfo.length > 0) {
+                // Limitar resultados para no saturar el chat
+                const topResults = foundInfo.slice(0, 3).join('<br><br>');
+                return `He encontrado esta información relacionada en el portal:<br><br>${topResults}`;
+            }
+
+            // 3. Fallback genérico
+            return "Lo siento, no encontré información específica sobre eso en la guía de estudios o las clases actuales. ¿Podrías intentar con otra palabra clave (ej: 'prompt', 'python', 'lunes')?";
+        }
 
         // =====================================================
         // NAVEGACIÓN
@@ -2503,7 +2767,6 @@ html
                 link.classList.remove('active');
             });
             
-            // Busca el link por el onclick en lugar del target del evento para mayor robustez
             const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(
                 link => link.getAttribute('onclick') === `showPage('${pageId}')`
             );
@@ -2566,17 +2829,16 @@ html
             const isLoggedIn = verificarUsuario();
             
             if (isLoggedIn) {
-                // La carga de datos ahora es más robusta y sincroniza el progreso detallado
                 if (SPREADSHEET_ID && API_KEY) {
                     cargarDatosUsuarios().then(() => {
-                        cargarVideos(); // Cargar videos después de tener el progreso correcto
+                        cargarVideos(); 
                     });
                 } else {
                     document.getElementById('studentsLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
                     document.getElementById('classesLoading').innerHTML = '<p style="color: var(--naranja);">⚠️ Configura tu Google Sheets API</p>';
                 }
 
-                loadIdeas(); // Cargar ideas/preguntas guardadas
+                loadIdeas(); 
                 
                 setTimeout(() => {
                     showToast('success', '¡Bienvenido/a!', `Hola ${currentUser.nombre.split(' ')[0]}, es un placer verte de nuevo 👋`);
@@ -2587,11 +2849,10 @@ html
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeClassModal();
+                const chat = document.getElementById('chatWindow');
+                if(chat.classList.contains('active')) toggleChat();
             }
         });
     </script>
 </body>
-
 </html>
-
-
