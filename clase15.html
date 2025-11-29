@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Clase: Adopción de IA Corporativa</title>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --accent: #EA4335;
+            --dark: #202124;
+            --light: #F8F9FA;
+            --card-bg: #ffffff;
+            --text-grey: #5f6368;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), #2c5fb2);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1000px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+        /* Dashboard Header Card */
+        .meta-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .meta-item {
+            text-align: center;
+            margin: 10px;
+        }
+        .meta-item strong {
+            display: block;
+            color: var(--text-grey);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .meta-item span {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        /* Sections */
+        h2 {
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            margin-top: 40px;
+            color: var(--dark);
+        }
+        
+        /* Concept Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-top: 3px solid transparent;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            padding: 10px;
+            background: #e8f0fe;
+            border-radius: 50%;
+            color: var(--primary);
+        }
+        .card h3 { margin-top: 0; }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(to right, #e6f4ea, #ffffff);
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        /* Quotes */
+        blockquote {
+            background: #f8f9fa;
+            border-left: 4px solid var(--accent);
+            margin: 20px 0;
+            padding: 15px 20px;
+            font-style: italic;
+            color: #555;
+        }
+        .citation {
+            font-size: 0.75rem;
+            color: #888;
+            vertical-align: super;
+            margin-left: 2px;
+            text-decoration: none;
+        }
+
+        /* Technical Terminology Tooltip style */
+        .tech-term {
+            border-bottom: 2px dashed var(--primary);
+            cursor: help;
+            position: relative;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+            margin-top: 50px;
+        }
+
+        .btn-action {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎓 Portal de Aprendizaje: Adopción de IA</h1>
+    <p>Desglosando la complejidad técnica para líderes del futuro</p>
+</header>
+
+<div class="container">
+
+    <div class="meta-card">
+        <div class="meta-item">
+            <strong>Fecha de Sesión</strong>
+            [cite_start]<span>28 Nov 2025 <sup class="citation">[cite: 1]</sup></span>
+        </div>
+        <div class="meta-item">
+            <strong>Fase / Semana</strong>
+            <span>Fase 1 / Especial</span>
+        </div>
+        <div class="meta-item">
+            <strong>Tema Principal</strong>
+            <span>Infraestructura & Transformers</span>
+        </div>
+        <div class="meta-item">
+            <strong>Participantes Clave</strong>
+            [cite_start]<span>Pablo R., AIWIS, Pedro C., Julio S. <sup class="citation">[cite: 2]</sup></span>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <h3>🚀 Introducción: El "Portal" de la IA</h3>
+        <p>
+            Bienvenido a esta sesión de adopción corporativa. [cite_start]En esta reunión, el equipo exploró cómo conectar sistemas antiguos con nueva inteligencia artificial, usando la metáfora de un "Portal" (similar a Pokémon, conectando mundos) <sup class="citation">[cite: 14]</sup>. El objetivo es desmitificar herramientas técnicas complejas y verlas como facilitadores de negocio.
+        </p>
+    </div>
+
+    <h2>🧩 Conceptos Fundamentales Discutidos</h2>
+    <div class="grid">
+        
+        <div class="card" style="border-top-color: var(--accent);">
+            <div class="card-icon">🔥</div>
+            <h3>Firebase y Datos</h3>
+            <p>
+                Se discutió extensamente sobre el manejo de datos. [cite_start]<strong>Firebase</strong> (una plataforma de Google) fue mencionada como una herramienta clave para manejar aplicaciones y canales de datos <sup class="citation">[cite: 2, 3, 10, 12]</sup>.
+            </p>
+            <ul>
+                <li><strong>¿Qué es?</strong> Es como una "mochila" en la nube que guarda datos de aplicaciones en tiempo real.</li>
+                [cite_start]<li><strong>Ventaja:</strong> Se describió el manejo de datos como "fácil" usando estas herramientas <sup class="citation">[cite: 9]</sup>.</li>
+                [cite_start]<li><strong>Alcance:</strong> Tiene presencia y funcionalidad confirmada en Sudamérica <sup class="citation">[cite: 2, 10]</sup>.</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border-top-color: var(--primary);">
+            <div class="card-icon">🤖</div>
+            <h3>El Modelo "Transformer"</h3>
+            <p>
+                [cite_start]AIWIS presentó conceptos avanzados como el <strong>"Certific Transformer"</strong> <sup class="citation">[cite: 3, 15]</sup>.
+            </p>
+            <p style="font-size: 0.9em; color: #555;">
+                <em>Nota Pedagógica:</em> Un "Transformer" es la arquitectura cerebral detrás de las IAs modernas (como ChatGPT). Es lo que permite a la máquina entender el contexto de una frase completa en lugar de palabra por palabra.
+            </p>
+            <p>
+                [cite_start]También se mencionó algo llamado "Certific Fore transform", posiblemente una referencia técnica a cómo se transforman los datos <sup class="citation">[cite: 3]</sup>.
+            </p>
+        </div>
+
+        <div class="card" style="border-top-color: var(--secondary);">
+            <div class="card-icon">🏛️</div>
+            <h3>Mainframe y Visión</h3>
+            <p>
+                [cite_start]Un punto clave fue la <strong>"Formula Mainframe"</strong> y la mención de "Super Ada" <sup class="citation">[cite: 4, 16]</sup>.
+            </p>
+            <ul>
+                [cite_start]<li><strong>El Reto:</strong> Conectar los "Mainframes" (computadoras centrales antiguas y potentes) con la nueva visión de talento y tecnología <sup class="citation">[cite: 16]</sup>.</li>
+                [cite_start]<li><strong>Legado:</strong> Se mencionó a Andrea Martínez en el contexto de "legacy" (legado), importante para entender de dónde venimos tecnológicamente <sup class="citation">[cite: 4, 17]</sup>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>🛠️ Detalles Técnicos y Herramientas</h2>
+    <p>Durante la sesión técnica, surgieron términos específicos que vale la pena aclarar para tu adopción de IA:</p>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <ul style="list-style: none; padding-left: 0;">
+            <li style="margin-bottom: 15px;">
+                [cite_start]<strong>⚡ "0 Simulator":</strong> Mencionado por Rafael Valdes <sup class="citation">[cite: 2, 8]</sup>. En el desarrollo de IA, los simuladores son cruciales para probar escenarios sin riesgo antes de lanzar un producto real.
+            </li>
+            <li style="margin-bottom: 15px;">
+                [cite_start]<strong>🌍 "Infinity" y "Google":</strong> Plataformas mencionadas junto con Firebase para la gestión de datos a gran escala <sup class="citation">[cite: 2, 9]</sup>.
+            </li>
+            <li style="margin-bottom: 15px;">
+                [cite_start]<strong>🔐 Seguridad:</strong> Rafael Valdes también trajo a la mesa temas de diferencias y seguridad, un pilar fundamental en cualquier adopción corporativa <sup class="citation">[cite: 7]</sup>.
+            </li>
+        </ul>
+    </div>
+
+    <h2>🗣️ Dinámica del Equipo</h2>
+    <blockquote>
+        [cite_start]"Hallelujah" - Julio Sepúlveda, celebrando la confirmación de la funcionalidad <sup class="citation">[cite: 11]</sup>.
+    </blockquote>
+    <p>
+        La reunión tuvo un tono positivo y colaborativo. [cite_start]Pedro Concha Larrain confirmó que una acción estaba "hecha" (done) <sup class="citation">[cite: 6][cite_start]</sup> y calificó la aplicación como "The winner" (la ganadora) <sup class="citation">[cite: 12]</sup>.
+    </p>
+
+    <div class="highlight-box" style="border-left-color: var(--dark); background: #e8eaed;">
+        <h3>👣 Próximos Pasos</h3>
+        <p>Para avanzar en el programa de adopción:</p>
+        <ul>
+            [cite_start]<li><strong>Tareas Administrativas:</strong> Pedro Concha Larrain se encargará de las tareas administrativas pendientes <sup class="citation">[cite: 21]</sup>.</li>
+            [cite_start]<li><strong>Revisión:</strong> Se recomienda revisar las notas generadas para asegurar precisión <sup class="citation">[cite: 22]</sup>.</li>
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    <p>Generado por tu Asistente de IA | [cite_start]Basado en transcripciones oficiales del programa AIWIS <sup class="citation">[cite: 1]</sup>.</p>
+</footer>
+
+</body>
+</html>
